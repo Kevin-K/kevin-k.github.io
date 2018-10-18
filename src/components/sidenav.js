@@ -13,10 +13,11 @@ const SideNav = props => {
   const { title, location, ...other } = props;
   return (
     <Drawer variant="persistent" open {...other}>
-      <Typography variant="title" color="inherit">
         <List>
           <ListItem>
-            <Branding avatar={avatar} title={title} />
+            <Typography variant="subtitle1" color="secondary">
+              <Branding avatar={avatar} title={title} />
+            </Typography>
           </ListItem>
           <Divider />
           <ListItem
@@ -24,17 +25,20 @@ const SideNav = props => {
             onClick={() => navigate('/')}
             selected={location.pathname === withPrefix('/')}
           >
-            about
+            <Typography variant="body2" color="secondary">
+              About
+            </Typography>
           </ListItem>
           <ListItem
             button
             onClick={() => navigate('/contact')}
             selected={location.pathname === withPrefix('/contact')}
           >
-            contact
+            <Typography variant="body2" color="secondary">
+              Contact
+            </Typography>
           </ListItem>
         </List>
-      </Typography>
     </Drawer>
   );
 };
