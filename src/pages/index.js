@@ -3,6 +3,7 @@ import Card from '@material-ui/core/Card';
 import { withStyles } from '@material-ui/core/styles';
 import Layout from '../components/layout';
 import { card } from '../styles';
+import withRoot from '../withRoot';
 
 // Build out the styles from the common libraries
 const styles = theme => ({
@@ -21,4 +22,4 @@ const IndexPage = props => {
   );
 };
 
-export default withStyles(styles)(IndexPage);
+export default withRoot(withStyles(styles)(IndexPage));
