@@ -1,6 +1,6 @@
 {
   "name": "kevin-k.github.io",
-  "description": "Gatsby site",
+  "description": "Personal site",
   "version": "1.0.0",
   "author": "Kevin Kelly <kevin@kevinjkelly.net>",
   "dependencies": {
@@ -30,6 +30,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/Kevin-K/kevin-k.github.io"
   }
 }
