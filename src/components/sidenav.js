@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import { navigate, withPrefix } from 'gatsby';
 import Branding from './branding';
-import avatar from '../images/avatar.jpg';
+import avatar from '../assets/avatar.jpg';
 
 const SideNav = props => {
   const { title, location, ...other } = props;
