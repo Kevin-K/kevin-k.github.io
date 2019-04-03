@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { StaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
-import { theme } from "../styles/theme";
+import { theme } from '../styles/theme';
 const drawerWidth = 180;
 const styles = theme => ({
   root: {},
@@ -15,6 +15,7 @@ const styles = theme => ({
   contentFrame: {
     marginLeft: drawerWidth,
     padding: theme.spacing.unit * 3,
+    maxWidth: '800px',
   },
   content: {
     margin: `auto ${theme.spacing.unit}`,
@@ -37,22 +38,22 @@ const Layout = props => {
       `}
       render={data => (
         <MuiThemeProvider theme={theme}>
-        <div className={classes.root}>
-          <Helmet title={data.site.siteMetadata.title} meta={[]}>
-            <html lang="en" />
-          </Helmet>
-          <SideNav
-            title={data.site.siteMetadata.title}
-            classes={{
-              paperAnchorLeft: classes.drawer,
-            }}
-            location={location}
-            anchor="left"
-          />
-          <div className={classes.contentFrame}>
-            <div className={classes.content}>{children}</div>
+          <div className={classes.root}>
+            <Helmet title={data.site.siteMetadata.title} meta={[]}>
+              <html lang="en" />
+            </Helmet>
+            <SideNav
+              title={data.site.siteMetadata.title}
+              classes={{
+                paperAnchorLeft: classes.drawer,
+              }}
+              location={location}
+              anchor="left"
+            />
+            <div className={classes.contentFrame}>
+              <div className={classes.content}>{children}</div>
+            </div>
           </div>
-        </div>
         </MuiThemeProvider>
       )}
     />

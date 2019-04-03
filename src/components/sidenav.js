@@ -13,32 +13,41 @@ const SideNav = props => {
   const { title, location, ...other } = props;
   return (
     <Drawer variant="persistent" open {...other}>
-        <List>
-          <ListItem>
-            <Typography variant="subtitle1" color="secondary">
-              <Branding avatar={avatar} title={title} />
-            </Typography>
-          </ListItem>
-          <Divider />
-          <ListItem
-            button
-            onClick={() => navigate('/')}
-            selected={location.pathname === withPrefix('/')}
-          >
-            <Typography variant="body2" color="secondary">
-              About
-            </Typography>
-          </ListItem>
-          <ListItem
-            button
-            onClick={() => navigate('/contact')}
-            selected={location.pathname === withPrefix('/contact')}
-          >
-            <Typography variant="body2" color="secondary">
-              Contact
-            </Typography>
-          </ListItem>
-        </List>
+      <List>
+        <ListItem>
+          <Typography variant="subtitle1" color="secondary">
+            <Branding avatar={avatar} title={title} />
+          </Typography>
+        </ListItem>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => navigate('/')}
+          selected={location.pathname === withPrefix('/')}
+        >
+          <Typography variant="body2" color="secondary">
+            About
+          </Typography>
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => navigate('/resume')}
+          selected={location.pathname === withPrefix('/resume')}
+        >
+          <Typography variant="body2" color="secondary">
+            Resume
+          </Typography>
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => navigate('/contact')}
+          selected={location.pathname === withPrefix('/contact')}
+        >
+          <Typography variant="body2" color="secondary">
+            Contact
+          </Typography>
+        </ListItem>
+      </List>
     </Drawer>
   );
 };
