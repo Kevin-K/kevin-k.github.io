@@ -15,7 +15,7 @@ const styles = theme => ({
   contentFrame: {
     marginLeft: drawerWidth,
     padding: theme.spacing.unit * 3,
-    maxWidth: '800px',
+    maxWidth: '960px',
   },
   content: {
     margin: `auto ${theme.spacing.unit}`,

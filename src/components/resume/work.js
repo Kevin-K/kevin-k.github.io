@@ -8,11 +8,13 @@ const styles = {
   column,
   compactList,
   root: {},
-  title: {},
-  description: {},
+  title: {
+    flex: 2,
+  },
   timespan: {
     alignItems: 'flex-end',
   },
+  description: {},
 };
 
 /**

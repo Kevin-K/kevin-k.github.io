@@ -10,6 +10,8 @@ import Heading from '../components/resume/heading';
 import Content from '../components/resume/content';
 import Work from '../components/resume/work';
 import Volunteer from '../components/resume/volunteer';
+import Education from '../components/resume/education';
+
 // Build out the styles from the common libraries
 const styles = theme => ({
   page: {
@@ -30,17 +32,19 @@ const ResumePage = props => {
           <span> {resumeData.basics.summary}</span>
         </Content>
         <Content title="EXPERIENCE">
-          {resumeData.work.map(job => (
-            <Work {...job} />
+          {resumeData.work.map(entry => (
+            <Work {...entry} />
           ))}
         </Content>
         <Content title="VOLUNTEER">
-          {resumeData.volunteer.map(job => (
-            <Volunteer {...job} />
+          {resumeData.volunteer.map(entry => (
+            <Volunteer {...entry} />
           ))}
         </Content>
         <Content title="EDUCATION">
-          <span> education goes here</span>
+          {resumeData.education.map(entry => (
+            <Education {...entry} />
+          ))}
         </Content>
         <Content title="SKILLS">
           <span> skills goes here</span>
