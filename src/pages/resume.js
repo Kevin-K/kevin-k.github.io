@@ -11,7 +11,7 @@ import Content from '../components/resume/content';
 import Work from '../components/resume/work';
 import Volunteer from '../components/resume/volunteer';
 import Education from '../components/resume/education';
-
+import Skill from '../components/resume/skill';
 // Build out the styles from the common libraries
 const styles = theme => ({
   page: {
@@ -47,7 +47,9 @@ const ResumePage = props => {
           ))}
         </Content>
         <Content title="SKILLS">
-          <span> skills goes here</span>
+          {resumeData.skills.map(entry => (
+            <Skill {...entry} />
+          ))}
         </Content>
       </Card>
     </Layout>
