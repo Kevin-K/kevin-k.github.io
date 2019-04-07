@@ -8,7 +8,8 @@ import withRoot from '../withRoot';
 import resumeData from '../assets/resume.json';
 import Heading from '../components/resume/heading';
 import Content from '../components/resume/content';
-
+import Work from '../components/resume/work';
+import Volunteer from '../components/resume/volunteer';
 // Build out the styles from the common libraries
 const styles = theme => ({
   page: {
@@ -26,13 +27,17 @@ const ResumePage = props => {
       <Card className={classes.page}>
         <Heading {...resumeData.basics} />
         <Content title="SUMMARY">
-          <span> summary goes here</span>
+          <span> {resumeData.basics.summary}</span>
         </Content>
         <Content title="EXPERIENCE">
-          <span> experience goes here</span>
+          {resumeData.work.map(job => (
+            <Work {...job} />
+          ))}
         </Content>
         <Content title="VOLUNTEER">
-          <span> volunteer goes here</span>
+          {resumeData.volunteer.map(job => (
+            <Volunteer {...job} />
+          ))}
         </Content>
         <Content title="EDUCATION">
           <span> education goes here</span>

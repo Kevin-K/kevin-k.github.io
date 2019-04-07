@@ -28,8 +28,17 @@ export const column = {
   flex: 1,
 };
 
-export const fixedColumn = px => ({
+export const fixedColumn = size => ({
   flexGrow: 0,
   flexSrink: 0,
-  flexBasis: px,
+  flexBasis: size,
 });
+
+/**
+ * A space-saver, doesn't indent ul's children.
+ * Buys some extra horizontal room in resume lists
+ */
+export const compactList = {
+  margin: '8px 0px',
+  padding: '0px 0px 0px 16px',
+};
