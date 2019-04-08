@@ -22,8 +22,11 @@ const styles = theme => ({
  * Util, string builder for USA formatted addresses from JSONResume
  * schema's basic.location specification.
  */
-const Location = ({ address, city, region, postalCode, countryCode }) =>
-  `${address} ${city} ${region}, ${postalCode} ${countryCode}`;
+const Location = ({ address, city, region, postalCode, countryCode }) => (
+  <span>
+    {address} {city} {region}, {postalCode} {countryCode}{' '}
+  </span>
+);
 
 Location.propTypes = {
   address: PropTypes.string,
@@ -45,20 +48,28 @@ Location.defaultProps = {
  * Resume heading block, generated from the JSONResume schema's basic
  * (sub-object) specification.
  */
-const Heading = ({ name, title, email, phone, location, classes }) => {
+const Heading = ({
+  name,
+  title,
+  email,
+  phone,
+  location,
+  disableContact,
+  classes,
+}) => {
   return (
     <div className={classes.root}>
       <div className={classes.primary}>
         <span>{name}</span>
         <span>, {title}</span>
       </div>
-      <div className={classes.secondary}>
-        <a href={`tel:${phone}`}>{phone} </a>
-        <a href={`mailto:${email}?subject=Inquiry`}>{email} </a>
-        <span>
+      {!disableContact && (
+        <div className={classes.secondary}>
+          <a href={`tel:${phone}`}>{phone} </a>
+          <a href={`mailto:${email}?subject=Inquiry`}>{email} </a>
           <Location {...location} />
-        </span>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -69,6 +80,7 @@ Heading.propTypes = {
   phone: PropTypes.string,
   email: PropTypes.string,
   location: PropTypes.shape(Location.propTypes),
+  disableContact: PropTypes.bool,
   classes: PropTypes.shape({
     root: PropTypes.string,
     primary: PropTypes.string,
@@ -77,10 +89,11 @@ Heading.propTypes = {
 };
 
 Heading.defaultProps = {
-  name: 'John Smith',
-  title: 'Software Engineer',
-  phone: '555-123-4567',
-  email: 'jsmith@example.com',
+  name: '',
+  title: '',
+  phone: '',
+  email: '',
+  disableContact: false,
   location: Location.defaultProps,
 };
 export default withStyles(styles)(Heading);

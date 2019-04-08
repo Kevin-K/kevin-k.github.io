@@ -37,7 +37,10 @@ const Work = ({
       <div className={classes.row}>
         <div className={`${classes.column} ${classes.title}`}>
           <span>
-            <a href={url}>{name}</a>, {position}
+            <b>
+              <a href={url}>{name}</a>
+            </b>
+            , {position}
           </span>
         </div>
         <div className={`${classes.column} ${classes.timespan}`}>

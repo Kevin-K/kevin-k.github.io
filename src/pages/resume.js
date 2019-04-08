@@ -27,7 +27,7 @@ const ResumePage = props => {
   return (
     <Layout {...other}>
       <Card className={classes.page}>
-        <Heading {...resumeData.basics} />
+        <Heading {...resumeData.basics} disableContact />
         <Content title="SUMMARY">
           <span> {resumeData.basics.summary}</span>
         </Content>
