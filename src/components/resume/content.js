@@ -6,12 +6,16 @@ const styles = theme => ({
   row,
   column,
   root: {},
+  // Even though this is a column, we want a fixed width
   title: {
-    // Even though this is a column, we want a fixed width
     ...fixedColumn(120),
   },
+  // This column can take the rest of the width
   content: {
-    // This column can take the rest of the width
+    // Put a margin between each child element
+    '& > :not(:last-child)': {
+      marginBottom: '20px',
+    },
   },
 });
 
