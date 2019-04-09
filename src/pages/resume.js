@@ -33,22 +33,22 @@ const ResumePage = props => {
         </Content>
         <Content title="EXPERIENCE">
           {resumeData.work.map(entry => (
-            <Work {...entry} />
+            <Work {...entry} key={`${entry.name}-${entry.startDate}`}/>
           ))}
         </Content>
         <Content title="VOLUNTEER">
           {resumeData.volunteer.map(entry => (
-            <Volunteer {...entry} />
+            <Volunteer {...entry} key={`${entry.name}-${entry.startDate}`} />
           ))}
         </Content>
         <Content title="EDUCATION">
           {resumeData.education.map(entry => (
-            <Education {...entry} />
+            <Education {...entry} key={`${entry.name}-${entry.startDate}`} />
           ))}
         </Content>
         <Content title="SKILLS">
           {resumeData.skills.map(entry => (
-            <Skill {...entry} />
+            <Skill {...entry} key={`${entry.name}-${entry.level}`} />
           ))}
         </Content>
       </Card>

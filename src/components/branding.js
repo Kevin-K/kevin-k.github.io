@@ -21,7 +21,7 @@ const Branding = props => {
   const { title, avatar, classes, className } = props;
   return (
     <div className={`${classes.root} ${className}`}>
-      <img src={avatar} className={classes.avatar} />
+      <img src={avatar} className={classes.avatar} alt={title}/>
       <span className={classes.title}>{title}</span>
     </div>
   );

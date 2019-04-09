@@ -4,6 +4,6 @@
  */
 export const card = theme => ({
   textAlign: 'center',
-  padding: theme.spacing.unit,
+  padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px`,
   margin: theme.spacing.unit * 2,
 });

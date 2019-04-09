@@ -6,7 +6,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { StaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
 import { theme } from '../styles/theme';
-const drawerWidth = 180;
+const drawerWidth = 145;
 const styles = theme => ({
   root: {},
   drawer: {
@@ -15,10 +15,10 @@ const styles = theme => ({
   contentFrame: {
     marginLeft: drawerWidth,
     padding: theme.spacing.unit * 3,
-    maxWidth: '960px',
   },
   content: {
-    margin: `auto ${theme.spacing.unit}`,
+    margin: `0 auto`,
+    maxWidth: '960px',
   },
 });
 

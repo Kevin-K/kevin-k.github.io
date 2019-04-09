@@ -66,7 +66,7 @@ const Work = ({
       {/* Work highlights */}
       <ul className={classes.compactList}>
         {highlights.map(entry => (
-          <li>{entry}</li>
+          <li key={entry}>{entry}</li>
         ))}
       </ul>
     </div>
@@ -75,7 +75,6 @@ const Work = ({
 
 Work.propTypes = {
   name: PropTypes.string.isRequired,
-  position: PropTypes.string.isRequired,
   position: PropTypes.string.isRequired,
   startDate: PropTypes.string.isRequired,
   url: PropTypes.string,
