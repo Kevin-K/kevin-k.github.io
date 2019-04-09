@@ -12,25 +12,33 @@
  * children should use the column class to
  * build a row/column structure
  */
-export const row = {
+export const row = theme => ({
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
   width: '100%',
-};
+  // mobile: row's become block for forced 1-col
+  [theme.breakpoints.down('sm')]: {
+    display: 'block',
+  },
+});
 
 /**
  * A column to place within a row
  */
-export const column = {
+export const column = theme => ({
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
-};
+  // mobile: column = row
+  [theme.breakpoints.down('sm')]: {
+    display: 'block',
+  },
+});
 
 export const fixedColumn = size => ({
   flexGrow: 0,
-  flexSrink: 0,
+  flexShrink: 0,
   flexBasis: size,
 });
 
@@ -38,7 +46,14 @@ export const fixedColumn = size => ({
  * A space-saver, doesn't indent ul's children.
  * Buys some extra horizontal room in resume lists
  */
-export const compactList = {
+export const compactList = theme => ({
   margin: '8px 0px',
   padding: '0px 0px 0px 16px',
-};
+
+  // for mobile, space out list children (ex: li)
+  [theme.breakpoints.down('sm')]: {
+    '& > *': {
+      margin: '8px 0px',
+    },
+  },
+});

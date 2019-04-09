@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { row, column, fixedColumn } from '../styles';
 const styles = theme => ({
-  row,
-  column,
+  row: row(theme),
+  column: column(theme),
   root: {},
   // Even though this is a column, we want a fixed width
   title: {
     ...fixedColumn(120),
+    marginBottom: '20px',
   },
   // This column can take the rest of the width
   content: {

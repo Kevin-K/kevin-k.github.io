@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { row, column, compactList } from '../styles';
-import {yearMonthDayDate, monthYearString} from '../../util/timespan';
+import { yearMonthDayDate, monthYearString } from '../../util/timespan';
 
-const styles = {
-  row,
-  column,
-  compactList,
+const styles = theme => ({
+  row: row(theme),
+  column: column(theme),
+  compactList: compactList(theme),
   root: {},
   title: {
     flex: 2,
@@ -16,7 +16,7 @@ const styles = {
     alignItems: 'flex-end',
   },
   description: {},
-};
+});
 
 /**
  * Resume entry for work experience.
@@ -40,7 +40,7 @@ const Work = ({
 
   // endDate is not (could be presently employed)
   const endString = eDate ? monthYearString(eDate) : 'Present';
-  
+
   return (
     <div className={classes.root}>
       {/* Work heading */}
