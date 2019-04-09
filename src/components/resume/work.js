@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import { row, column, compactList } from '../styles';
 import { yearMonthDayDate, monthYearString } from '../../util/timespan';
 
@@ -44,24 +45,24 @@ const Work = ({
   return (
     <div className={classes.root}>
       {/* Work heading */}
-      <div className={classes.row}>
+      <Typography variant="subtitle1" className={classes.row}>
         <div className={`${classes.column} ${classes.title}`}>
           <span>
-            <b>
-              <a href={url}>{name}</a>
-            </b>
-            , {position}
+            <b>{url ? <a href={url}>{name}</a> : name}</b>, {position}
           </span>
         </div>
         <div className={`${classes.column} ${classes.timespan}`}>
           {startString} to {endString}
         </div>
-      </div>
+      </Typography>
 
       {/* Work description */}
-      <div className={`${classes.row} ${classes.description}`}>
+      <Typography
+        variant="body2"
+        className={`${classes.row} ${classes.description}`}
+      >
         {description}
-      </div>
+      </Typography>
 
       {/* Work highlights */}
       <ul className={classes.compactList}>

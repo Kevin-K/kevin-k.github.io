@@ -33,7 +33,7 @@ const ResumePage = props => {
         </Content>
         <Content title="EXPERIENCE">
           {resumeData.work.map(entry => (
-            <Work {...entry} key={`${entry.name}-${entry.startDate}`}/>
+            <Work {...entry} key={`${entry.name}-${entry.startDate}`} />
           ))}
         </Content>
         <Content title="VOLUNTEER">

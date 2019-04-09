@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {},
-  primary: {
-    fontSize: theme.spacing.unit * 3,
-  },
+  primary: {},
   secondary: {
-    fontSize: '12px',
     '& > *': {
       display: 'inline-block',
     },
@@ -59,16 +57,21 @@ const Heading = ({
 }) => {
   return (
     <div className={classes.root}>
-      <div className={classes.primary}>
-        <span>{name}</span>
-        <span>, {title}</span>
-      </div>
-      {!disableContact && (
-        <div className={classes.secondary}>
-          <a href={`tel:${phone}`}>{phone} </a>
-          <a href={`mailto:${email}?subject=Inquiry`}>{email} </a>
-          <Location {...location} />
+      <Typography variant="h5">
+        <div className={classes.primary}>
+          <span>
+            {name}, {title}
+          </span>
         </div>
+      </Typography>
+      {!disableContact && (
+        <Typography variant="subtitle1">
+          <div className={classes.secondary}>
+            <a href={`tel:${phone}`}>{phone} </a>
+            <a href={`mailto:${email}?subject=Inquiry`}>{email} </a>
+            <Location {...location} />
+          </div>
+        </Typography>
       )}
     </div>
   );
