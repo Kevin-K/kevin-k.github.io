@@ -11,6 +11,7 @@ import avatar from '../assets/avatar.jpg';
 
 const SideNav = props => {
   const { title, location, ...other } = props;
+  const path = location.pathname.replace(/\/+$/, '');
   return (
     <Drawer variant="persistent" open {...other}>
       <List>
@@ -22,8 +23,8 @@ const SideNav = props => {
         <Divider />
         <ListItem
           button
-          onClick={() => navigate('/resume/')}
-          selected={location.pathname === withPrefix('/resume/')}
+          onClick={() => navigate('/resume')}
+          selected={path === withPrefix('/resume')}
         >
           <Typography variant="body2" color="secondary">
             Resume
@@ -31,8 +32,8 @@ const SideNav = props => {
         </ListItem>
         <ListItem
           button
-          onClick={() => navigate('/contact/')}
-          selected={location.pathname === withPrefix('/contact/')}
+          onClick={() => navigate('/contact')}
+          selected={path === withPrefix('/contact')}
         >
           <Typography variant="body2" color="secondary">
             Contact
