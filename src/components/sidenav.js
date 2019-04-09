@@ -22,8 +22,8 @@ const SideNav = props => {
         <Divider />
         <ListItem
           button
-          onClick={() => navigate('/resume')}
-          selected={location.pathname === withPrefix('/resume')}
+          onClick={() => navigate('/resume/')}
+          selected={location.pathname === withPrefix('/resume/')}
         >
           <Typography variant="body2" color="secondary">
             Resume
@@ -31,8 +31,8 @@ const SideNav = props => {
         </ListItem>
         <ListItem
           button
-          onClick={() => navigate('/contact')}
-          selected={location.pathname === withPrefix('/contact')}
+          onClick={() => navigate('/contact/')}
+          selected={location.pathname === withPrefix('/contact/')}
         >
           <Typography variant="body2" color="secondary">
             Contact
