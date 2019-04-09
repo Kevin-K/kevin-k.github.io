@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { row, column, compactList } from '../styles';
+import {yearMonthDayDate, monthYearString} from '../../util/timespan';
 
 const styles = {
   row,
@@ -31,6 +32,15 @@ const Work = ({
   endDate,
   highlights,
 }) => {
+  const sDate = yearMonthDayDate(startDate);
+  const eDate = yearMonthDayDate(endDate);
+
+  // startDate is required
+  const startString = monthYearString(sDate);
+
+  // endDate is not (could be presently employed)
+  const endString = eDate ? monthYearString(eDate) : 'Present';
+  
   return (
     <div className={classes.root}>
       {/* Work heading */}
@@ -44,7 +54,7 @@ const Work = ({
           </span>
         </div>
         <div className={`${classes.column} ${classes.timespan}`}>
-          {startDate} to {endDate}
+          {startString} to {endString}
         </div>
       </div>
 
@@ -64,8 +74,12 @@ const Work = ({
 };
 
 Work.propTypes = {
-  name: PropTypes.string,
-  position: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  position: PropTypes.string.isRequired,
+  position: PropTypes.string.isRequired,
+  startDate: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  endDate: PropTypes.string,
   classes: PropTypes.shape({
     root: PropTypes.string,
     title: PropTypes.string,
@@ -74,7 +88,8 @@ Work.propTypes = {
 };
 
 Work.defaultProps = {
-  name: '',
   position: '',
+  url: '',
+  endDate: '',
 };
 export default withStyles(styles)(Work);
