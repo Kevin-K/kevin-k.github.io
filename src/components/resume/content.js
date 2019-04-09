@@ -9,13 +9,13 @@ const styles = theme => ({
   // Even though this is a column, we want a fixed width
   title: {
     ...fixedColumn(120),
-    marginBottom: '20px',
+    marginBottom: theme.spacing.unit * 3,
   },
   // This column can take the rest of the width
   content: {
     // Put a margin between each child element
     '& > :not(:last-child)': {
-      marginBottom: '20px',
+      marginBottom: theme.spacing.unit * 3,
     },
   },
 });

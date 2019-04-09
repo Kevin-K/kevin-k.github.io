@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   root: {},
   primary: {
-    fontSize: '20px',
+    fontSize: theme.spacing.unit * 3,
   },
   secondary: {
     fontSize: '12px',
@@ -13,7 +13,7 @@ const styles = theme => ({
       display: 'inline-block',
     },
     '& > :not(:last-child)': {
-      paddingRight: '8px',
+      paddingRight: theme.spacing.unit,
     },
   },
 });
