@@ -20,7 +20,9 @@ const styles = theme => ({
 
       // mobile: add space between content for mobile
       [theme.breakpoints.down('sm')]: {
-        marginBottom: theme.spacing.unit * 4,
+        '@media not print': {
+          marginBottom: theme.spacing.unit * 2,
+        },
       },
     },
   },
@@ -41,6 +43,7 @@ const Content = ({ title, classes, children }) => {
       <Typography
         variant="body2"
         className={`${classes.column} ${classes.content}`}
+        component="div"
       >
         {children}
       </Typography>

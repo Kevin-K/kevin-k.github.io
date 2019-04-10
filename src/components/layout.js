@@ -2,24 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { StaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
 import { theme } from '../styles/theme';
-const drawerWidth = 145;
+import { nav, page, frame } from '../styles';
 const styles = theme => ({
   root: {},
-  drawer: {
-    width: drawerWidth,
-  },
-  contentFrame: {
-    marginLeft: drawerWidth,
-    padding: theme.spacing.unit * 3,
-  },
-  content: {
-    margin: `0 auto`,
-    maxWidth: '960px',
-  },
+  nav: nav(theme),
+  frame: frame(theme),
+  page: page(theme),
 });
 
 const Layout = props => {
@@ -45,13 +38,13 @@ const Layout = props => {
             <SideNav
               title={data.site.siteMetadata.title}
               classes={{
-                paperAnchorLeft: classes.drawer,
+                paperAnchorLeft: classes.nav,
               }}
               location={location}
               anchor="left"
             />
-            <div className={classes.contentFrame}>
-              <div className={classes.content}>{children}</div>
+            <div className={classes.frame}>
+              <Card className={classes.page}>{children}</Card>
             </div>
           </div>
         </MuiThemeProvider>

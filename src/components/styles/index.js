@@ -19,7 +19,9 @@ export const row = theme => ({
   width: '100%',
   // mobile: row's become block for forced 1-col
   [theme.breakpoints.down('sm')]: {
-    display: 'block',
+    '@media not print': {
+      display: 'block',
+    },
   },
 });
 
@@ -32,7 +34,9 @@ export const column = theme => ({
   flex: 1,
   // mobile: column = row
   [theme.breakpoints.down('sm')]: {
-    display: 'block',
+    '@media not print': {
+      display: 'block',
+    },
   },
 });
 
@@ -51,9 +55,12 @@ export const compactList = theme => ({
   padding: '0px 0px 0px 16px',
 
   // for mobile, space out list children (ex: li)
+  // (unless printing)
   [theme.breakpoints.down('sm')]: {
-    '& > *': {
-      margin: '8px 0px',
+    '@media not print': {
+      '& > *': {
+        margin: '8px 0px',
+      },
     },
   },
 });

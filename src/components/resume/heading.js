@@ -13,6 +13,12 @@ const styles = theme => ({
     '& > :not(:last-child)': {
       paddingRight: theme.spacing.unit,
     },
+    '@media print': {
+      '& > a': {
+        color: 'black',
+        textDecoration: 'none',
+      },
+    },
   },
 });
 
@@ -67,9 +73,9 @@ const Heading = ({
       {!disableContact && (
         <Typography variant="subtitle1">
           <div className={classes.secondary}>
-            <a href={`tel:${phone}`}>{phone} </a>
-            <a href={`mailto:${email}?subject=Inquiry`}>{email} </a>
-            <Location {...location} />
+            {phone && <a href={`tel:${phone}`}>{phone} </a>}
+            {email && <a href={`mailto:${email}?subject=Inquiry`}>{email} </a>}
+            {location.address && <Location {...location} />}
           </div>
         </Typography>
       )}
