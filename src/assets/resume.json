@@ -27,7 +27,7 @@
       "position": "Senior Software Engineer",
       "startDate": "2017-07-01",
       "highlights": [
-        "Team lead and lead front-end developer for a cyber-security provisioning application built with Material UI (ReactJS), HAPI (NodeJS) and PostgreSQL.",
+        "Team lead and lead front-end developer for a cyber-security provisioning application built with ReactJS, GraphQL, NodeJS, and PostgreSQL.",
         "Managed and mentored web application development efforts for a team of 5 application developers.",
         "Designed and built OSI Layer 2/3/4 filtration functionality in C/C++ to provide  network security in both operating system kernel and user space.",
         "Performed requirement derivation, design documentation, and task allotment for various efforts."
