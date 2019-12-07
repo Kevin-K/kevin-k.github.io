@@ -7,24 +7,24 @@ const styles = theme => ({
   row: row(theme),
   column: column(theme),
   root: {
-    paddingTop: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
+    paddingTop: theme.spacing(),
+    paddingBottom: theme.spacing(),
   },
   // Even though this is a column, we want a fixed width
   title: {
     ...fixedColumn(120),
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(),
   },
   // This column can take the rest of the width
   content: {
     // Put a margin between each child element
     '& > :not(:last-child)': {
-      marginBottom: theme.spacing.unit,
+      marginBottom: theme.spacing(),
 
       // mobile: add space between content for mobile
       [theme.breakpoints.down('sm')]: {
         '@media not print': {
-          marginBottom: theme.spacing.unit * 2,
+          marginBottom: theme.spacing(2),
         },
       },
     },

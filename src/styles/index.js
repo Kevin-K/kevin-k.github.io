@@ -37,7 +37,7 @@ export const nav = theme => ({
  * @param {*} theme
  */
 export const page = theme => ({
-  padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px`,
+  padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
   width: '100%',
   margin: `0 auto`,
   maxWidth: theme.breakpoints.values.md - drawerWidth,
@@ -46,9 +46,9 @@ export const page = theme => ({
     boxShadow: `none`,
   },
   '& > :not(:first-child)': {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(),
   },
   '& > :not(:last-child)': {
-    paddingBottom: theme.spacing.unit,
+    paddingBottom: theme.spacing(),
   },
 });

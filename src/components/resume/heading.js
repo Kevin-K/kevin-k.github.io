@@ -11,7 +11,7 @@ const styles = theme => ({
       display: 'inline-block',
     },
     '& > :not(:last-child)': {
-      paddingRight: theme.spacing.unit,
+      paddingRight: theme.spacing(),
     },
     '@media print': {
       '& > a': {
