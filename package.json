@@ -8,6 +8,7 @@
     "@material-ui/styles": "^4.7.1",
     "core-js": "^2.5.7",
     "gatsby": "^2.18.4",
+    "gatsby-plugin-layout": "^1.1.16",
     "gatsby-plugin-manifest": "^2.2.30",
     "gatsby-plugin-material-ui": "^2.1.6",
     "gatsby-plugin-offline": "^3.0.24",

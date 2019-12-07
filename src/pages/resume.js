@@ -1,6 +1,5 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Layout from '../components/layout';
 import { resume } from '../styles/resume';
 import resumeData from '../assets/resume.json';
 import Heading from '../components/resume/heading';
@@ -18,7 +17,7 @@ const styles = theme => ({
 
 const ResumePage = props => {
   return (
-    <Layout {...props}>
+    <React.Fragment>
       <Heading {...resumeData.basics} />
       <Content title="SUMMARY">
         <span> {resumeData.basics.summary}</span>
@@ -43,7 +42,7 @@ const ResumePage = props => {
           <Skill {...entry} key={`${entry.name}-${entry.level}`} />
         ))}
       </Content>
-    </Layout>
+    </React.Fragment>
   );
 };
 
