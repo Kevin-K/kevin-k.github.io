@@ -6,7 +6,10 @@ import { row, column, fixedColumn } from '../styles';
 const styles = theme => ({
   row: row(theme),
   column: column(theme),
-  root: {},
+  root: {
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+  },
   // Even though this is a column, we want a fixed width
   title: {
     ...fixedColumn(120),

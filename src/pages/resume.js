@@ -15,9 +15,9 @@ const styles = theme => ({
   page: resume(theme),
 });
 
-const ResumePage = props => {
+const ResumePage = ({classes}) => {
   return (
-    <React.Fragment>
+    <div className={classes.page}>
       <Heading {...resumeData.basics} />
       <Content title="SUMMARY">
         <span> {resumeData.basics.summary}</span>
@@ -42,7 +42,7 @@ const ResumePage = props => {
           <Skill {...entry} key={`${entry.name}-${entry.level}`} />
         ))}
       </Content>
-    </React.Fragment>
+    </div>
   );
 };
 
