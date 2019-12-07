@@ -50,10 +50,8 @@
       "startDate": "2014-01-01",
       "endDate": "2017-07-01",
       "highlights": [
-        "Lead web developer for a signal processing effort. Developed and maintained the real-time thin-client application for configuration, visualization, and analysis of the processing server.",
-        "Lead developer of the open-sourced Ozone IWC, a JavaScript framework for real-time web application communication in the browser without server middleware.",
-        "Created thin-client tools, web applications, web servers, and interactive web tutorials.",
-        "Implemented build task automation with various tools including Webpack and Grunt.",
+        "Lead web developer for a signal processing effort. Developed and maintained the real-time web application for process configuration and analytics.",
+        "Lead developer of Ozone IWC, providing web application communication without server middleware.",
         "Mentored JavaScript efforts including real-time data streaming and data visualization."
       ]
     },
@@ -64,8 +62,7 @@
       "endDate": "2013-12-15",
       "highlights": [
         "Developed a networked android application for data logging and debugging interfaced devices.",
-        "Developed commercial android applications for various device sizes in an agile-based effort.",
-        "Performed FPGA analysis for migration compatibility and power consumption."
+        "Developed commercial android applications for various device sizes in an agile-based effort."
       ]
     },
     {
@@ -105,24 +102,29 @@
   "publications": [],
   "skills": [
     {
-      "name": "Web",
+      "name": "Web Frameworks",
       "level": "",
       "keywords": [
-        "Javascript",
-        "TypeScript",
         "React",
-        "Jest",
-        "Node.js",
         "Ruby on Rails",
-        "PostgreSQL",
-        "MongoDB",
         "Angular"
       ]
     },
-    {
-      "name": "General Software Languages",
+    { 
+      "name": "Databases",
       "level": "",
       "keywords": [
+        "PostgreSQL",
+        "Druid",
+        "MongoDB"
+      ]
+    },
+    {
+      "name": "Software Languages",
+      "level": "",
+      "keywords": [
+        "JavaScript",
+        "TypeScript",
         "Ruby",
         "Golang",
         "Python",
@@ -133,27 +135,37 @@
       ]
     },
     {
-      "name": "Development Areas",
+      "name": "Test & Integration",
       "level": "",
       "keywords": [
-        "Networked Applications",
-        "Thin-client Applications",
-        "Cyber-security Applications",
-        "Real-time Web Applications and Servers",
-        "Data Visualization"
+        "CircleCI",
+        "Jenkins",
+        "Jest",
+        "React Testing Library",
+        "Enzyme",
+        "Rspec",
+        "Capybara",
+        "Googletest"
+      ]
+    },
+    {
+      "name": "Deployment",
+      "level": "",
+      "keywords": [
+        "Docker",
+        "Google Cloud Platform",
+        "Amazon Web Services"
       ]
     },
     {
       "name": "Tooling",
       "level": "",
       "keywords": [
-        "Linux",
         "Git",
+        "Linux",
         "NPM",
         "Webpack",
-        "GDB",
-        "Jenkins",
-        "Amazon Web Services"
+        "GDB"
       ]
     }
   ]
