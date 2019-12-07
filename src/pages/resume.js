@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Layout from '../components/layout';
 import { resume } from '../styles/resume';
-import withRoot from '../withRoot';
 import resumeData from '../assets/resume.json';
 import Heading from '../components/resume/heading';
 import Content from '../components/resume/content';
@@ -48,4 +47,4 @@ const ResumePage = props => {
   );
 };
 
-export default withRoot(withStyles(styles)(ResumePage));
+export default withStyles(styles)(ResumePage);

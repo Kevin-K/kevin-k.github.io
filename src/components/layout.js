@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { StaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
-import { theme } from '../styles/theme';
 import { nav, page, frame } from '../styles';
 const styles = theme => ({
   root: {},
@@ -30,7 +28,6 @@ const Layout = props => {
         }
       `}
       render={data => (
-        <MuiThemeProvider theme={theme}>
           <div className={classes.root}>
             <Helmet title={data.site.siteMetadata.title} meta={[]}>
               <html lang="en" />
@@ -47,7 +44,6 @@ const Layout = props => {
               <Card className={classes.page}>{children}</Card>
             </div>
           </div>
-        </MuiThemeProvider>
       )}
     />
   );

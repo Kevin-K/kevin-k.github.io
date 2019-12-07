@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Layout from '../components/layout';
-import withRoot from '../withRoot';
 
 // Build out the styles from the common libraries
 const styles = theme => ({});
@@ -21,4 +20,4 @@ const ContactPage = props => {
   );
 };
 
-export default withRoot(withStyles(styles)(ContactPage));
+export default withStyles(styles)(ContactPage);
