@@ -31,7 +31,7 @@ const Work = ({
   position,
   startDate,
   endDate,
-  highlights,
+  highlights = [],
 }) => {
   const sDate = yearMonthDayDate(startDate);
   const eDate = yearMonthDayDate(endDate);
@@ -65,11 +65,13 @@ const Work = ({
       </Typography>
 
       {/* Work highlights */}
-      <ul className={classes.compactList}>
-        {highlights.map(entry => (
-          <li key={entry}>{entry}</li>
-        ))}
-      </ul>
+      {highlights.length ? (
+        <ul className={classes.compactList}>
+          {highlights.map(entry => (
+            <li key={entry}>{entry}</li>
+          ))}
+        </ul>
+      ) : null}
     </div>
   );
 };

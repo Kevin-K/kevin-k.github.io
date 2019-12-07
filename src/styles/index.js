@@ -44,6 +44,7 @@ export const page = theme => ({
   minHeight: '100vh',
   '@media print': {
     boxShadow: `none`,
+    padding: 0
   },
   '& > :not(:first-child)': {
     marginTop: theme.spacing(),
