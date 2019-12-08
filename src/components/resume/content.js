@@ -13,7 +13,6 @@ const styles = theme => ({
   // Even though this is a column, we want a fixed width
   title: {
     ...fixedColumn(120),
-    marginBottom: theme.spacing(),
   },
   // This column can take the rest of the width
   content: {
