@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { row, column, fixedColumn } from '../styles';
-const styles = theme => ({
+
+const useStyles = makeStyles(theme => ({
   row: row(theme),
   column: column(theme),
-  root: {
-    paddingTop: theme.spacing(),
-    paddingBottom: theme.spacing(),
-  },
+  root: {},
   // Even though this is a column, we want a fixed width
   title: {
     ...fixedColumn(120),
@@ -28,12 +26,13 @@ const styles = theme => ({
       },
     },
   },
-});
+}));
 
 /**
  * Resume content block.
  */
-const Content = ({ title, classes, children }) => {
+const Content = ({ title, children }) => {
+  const classes = useStyles();
   return (
     <div className={`${classes.row} ${classes.root}`}>
       <Typography
@@ -56,15 +55,10 @@ const Content = ({ title, classes, children }) => {
 Content.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,
-  classes: PropTypes.shape({
-    root: PropTypes.string,
-    title: PropTypes.string,
-    content: PropTypes.string,
-  }).isRequired,
 };
 
 Content.defaultProps = {
   title: '',
   children: '',
 };
-export default withStyles(styles)(Content);
+export default Content;
