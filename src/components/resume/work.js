@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { row, column, compactList } from '../styles';
 import { yearMonthDayDate, monthYearString } from '../../util/timespan';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   row: row(theme),
   column: column(theme),
   compactList: compactList(theme),
@@ -17,14 +17,13 @@ const styles = theme => ({
     alignItems: 'flex-end',
   },
   description: {},
-});
+}));
 
 /**
  * Resume entry for work experience.
  * Follows the JSONSchema format for work entries
  */
 const Work = ({
-  classes,
   name,
   description,
   url,
@@ -33,6 +32,7 @@ const Work = ({
   endDate,
   highlights = [],
 }) => {
+  const classes = useStyles();
   const sDate = yearMonthDayDate(startDate);
   const eDate = yearMonthDayDate(endDate);
 
@@ -82,11 +82,6 @@ Work.propTypes = {
   startDate: PropTypes.string.isRequired,
   url: PropTypes.string,
   endDate: PropTypes.string,
-  classes: PropTypes.shape({
-    root: PropTypes.string,
-    title: PropTypes.string,
-    content: PropTypes.string,
-  }).isRequired,
 };
 
 Work.defaultProps = {
@@ -94,4 +89,4 @@ Work.defaultProps = {
   url: '',
   endDate: '',
 };
-export default withStyles(styles)(Work);
+export default Work;

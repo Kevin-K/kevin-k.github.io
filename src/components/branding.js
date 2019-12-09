@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     margin: 'auto',
   },
@@ -16,12 +16,13 @@ const styles = theme => ({
     display: 'block',
     textAlign: 'center',
   },
-});
-const Branding = props => {
-  const { title, avatar, classes, className } = props;
+}));
+
+const Branding = ({ title, avatar, className }) => {
+  const classes = useStyles();
   return (
     <div className={`${classes.root} ${className}`}>
-      <img src={avatar} className={classes.avatar} alt={title}/>
+      <img src={avatar} className={classes.avatar} alt={title} />
       <span className={classes.title}>{title}</span>
     </div>
   );
@@ -30,10 +31,6 @@ const Branding = props => {
 Branding.propTypes = {
   name: PropTypes.string,
   avatar: PropTypes.node,
-  classes: PropTypes.shape({
-    avatar: PropTypes.string,
-    name: PropTypes.string,
-  }).isRequired,
 };
 
 Branding.defaultProps = {
@@ -41,4 +38,4 @@ Branding.defaultProps = {
   title: '{name}',
 };
 
-export default withStyles(styles)(Branding);
+export default Branding;

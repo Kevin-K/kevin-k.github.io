@@ -1,6 +1,6 @@
 /**
  * JSS in CSS styling.
- * Intended to be passed to Material UI withStyles HOC.
+ * Intended to be passed to Material UI  makeStyles hook.
  */
 export const resume = theme => ({
   textAlign: 'left',

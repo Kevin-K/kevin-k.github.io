@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   primary: {},
   secondary: {
@@ -20,7 +20,7 @@ const styles = theme => ({
       },
     },
   },
-});
+}));
 
 /**
  * Util, string builder for USA formatted addresses from JSONResume
@@ -52,15 +52,8 @@ Location.defaultProps = {
  * Resume heading block, generated from the JSONResume schema's basic
  * (sub-object) specification.
  */
-const Heading = ({
-  name,
-  title,
-  email,
-  phone,
-  location,
-  disableContact,
-  classes,
-}) => {
+const Heading = ({ name, title, email, phone, location, disableContact }) => {
+  const classes = useStyles();
   return (
     <div className={classes.root}>
       <Typography variant="h5">
@@ -90,11 +83,6 @@ Heading.propTypes = {
   email: PropTypes.string,
   location: PropTypes.shape(Location.propTypes),
   disableContact: PropTypes.bool,
-  classes: PropTypes.shape({
-    root: PropTypes.string,
-    primary: PropTypes.string,
-    secondary: PropTypes.string,
-  }).isRequired,
 };
 
 Heading.defaultProps = {
@@ -105,4 +93,4 @@ Heading.defaultProps = {
   disableContact: false,
   location: Location.defaultProps,
 };
-export default withStyles(styles)(Heading);
+export default Heading;

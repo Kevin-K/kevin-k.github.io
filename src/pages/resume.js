@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { resume } from '../styles/resume';
 import resumeData from '../assets/resume.json';
 import Heading from '../components/resume/heading';
@@ -11,11 +11,12 @@ import Skill from '../components/resume/skill';
 
 // Build out the styles from the common libraries
 // add the resume page theme to the layout's content
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   page: resume(theme),
-});
+}));
 
-const ResumePage = ({classes}) => {
+const ResumePage = props => {
+  const classes = useStyles();
   return (
     <div className={classes.page}>
       <Heading {...resumeData.basics} />
@@ -46,4 +47,4 @@ const ResumePage = ({classes}) => {
   );
 };
 
-export default withStyles(styles)(ResumePage);
+export default ResumePage;

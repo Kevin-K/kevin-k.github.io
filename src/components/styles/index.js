@@ -1,6 +1,6 @@
 /**
  * CSS in JS styling (JSS).
- * Intended to be passed to Material UI withStyles HOC.
+ * Intended to be passed to Material UI  makeStyles hook.
  *
  * This components/styles/inde.js differs from styles/index.js
  * because these are common "util" styles for the components,

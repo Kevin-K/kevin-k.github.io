@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = {
+const useStyles = makeStyles({
   root: {},
-};
+});
 
 /**
  * Resume entry for skills.
  * Follows the JSONSchema format for skill entries
  */
-const Skills = ({ classes, name, level, keywords }) => {
+const Skills = ({ name, level, keywords }) => {
+  const classes = useStyles();
   return (
     <div className={classes.root}>
       <span>
@@ -28,9 +29,6 @@ Skills.propTypes = {
   name: PropTypes.string,
   level: PropTypes.string,
   keywords: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.shape({
-    root: PropTypes.string,
-  }).isRequired,
 };
 
 Skills.defaultProps = {
@@ -38,4 +36,4 @@ Skills.defaultProps = {
   level: '',
   keywords: [],
 };
-export default withStyles(styles)(Skills);
+export default Skills;

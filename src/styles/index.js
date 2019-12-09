@@ -1,6 +1,6 @@
 /**
  * JSS JS in CSS styling.
- * Intended to be passed to Material UI withStyles HOC.
+ * Intended to be passed to Material UI makeStyles hook.
  */
 export const drawerWidth = 145;
 
@@ -44,7 +44,7 @@ export const page = theme => ({
   minHeight: '100vh',
   '@media print': {
     boxShadow: `none`,
-    padding: 0
+    padding: 0,
   },
   '& > :not(:first-child)': {
     marginTop: theme.spacing(),
