@@ -39,7 +39,7 @@ export const nav = theme => ({
 export const page = theme => ({
   padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
   width: '100%',
-  margin: `0 auto`,
+  margin: `${theme.spacing()}px auto`,
   maxWidth: theme.breakpoints.values.md - drawerWidth,
   minHeight: '100vh',
   '@media print': {
