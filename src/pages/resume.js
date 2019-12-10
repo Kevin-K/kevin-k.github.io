@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
 import resumeData from '../assets/resume.json';
 import Heading from '../components/resume/heading';
 import Content from '../components/resume/content';
@@ -13,12 +14,18 @@ import Skill from '../components/resume/skill';
 const useStyles = makeStyles(theme => ({
   page: {
     textAlign: 'left',
+    // padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
     '& > :not(:first-child)': {
       paddingTop: theme.spacing(),
     },
     '& > :not(:last-child)': {
       borderBottom: 'solid 1px #CFCFCF',
       paddingBottom: theme.spacing(),
+    },
+    // remove the card effect on small screens
+    [theme.breakpoints.down('sm')]: {
+      margin: `auto`,
+      boxShadow: `none`,
     },
   },
 }));

@@ -2,15 +2,41 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import { StaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
-import { nav, page, frame } from './styles';
+import Card from '@material-ui/core/Card';
+
+export const drawerWidth = 145;
 const useStyles = makeStyles(theme => ({
   root: {},
-  nav: nav(theme),
-  frame: frame(theme),
-  page: page(theme),
+  nav: {
+    width: drawerWidth,
+
+    // remove nav on print
+    '@media print': {
+      display: 'none',
+    },
+  },
+  frame: {
+    marginLeft: drawerWidth,
+
+    // remove nav margin on print
+    '@media print': {
+      marginLeft: 0,
+    },
+  },
+  page: {
+    minHeight: '100vh',
+    margin: `auto`,
+    maxWidth: theme.breakpoints.values.md - drawerWidth,
+    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
+
+    // remove extra space and card effect on print
+    '@media print': {
+      boxShadow: `none`,
+      padding: 0,
+    },
+  },
 }));
 
 const Layout = ({ children, location }) => {

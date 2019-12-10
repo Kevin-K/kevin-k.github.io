@@ -32,6 +32,15 @@ const SideNav = props => {
         </ListItem>
         <ListItem
           button
+          onClick={() => navigate('/blog')}
+          selected={path === withPrefix('/blog')}
+        >
+          <Typography variant="body2" color="secondary">
+            Blog
+          </Typography>
+        </ListItem>
+        <ListItem
+          button
           onClick={() => navigate('/contact')}
           selected={path === withPrefix('/contact')}
         >
