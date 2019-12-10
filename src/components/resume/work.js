@@ -2,21 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { row, column, compactList } from '../styles';
+import { row, column, compactList } from './styles';
 import { yearMonthDayDate, monthYearString } from '../../util/timespan';
 
 const useStyles = makeStyles(theme => ({
   row: row(theme),
-  column: column(theme),
   compactList: compactList(theme),
-  root: {},
   title: {
+    ...column(theme),
     flex: 2,
   },
   timespan: {
+    ...column(theme),
     alignItems: 'flex-end',
   },
-  description: {},
 }));
 
 /**
@@ -43,24 +42,21 @@ const Work = ({
   const endString = eDate ? monthYearString(eDate) : 'Present';
 
   return (
-    <div className={classes.root}>
+    <div>
       {/* Work heading */}
       <Typography variant="subtitle1" className={classes.row}>
-        <div className={`${classes.column} ${classes.title}`}>
+        <div className={classes.title}>
           <span>
             <b>{url ? <a href={url}>{name}</a> : name}</b>, {position}
           </span>
         </div>
-        <div className={`${classes.column} ${classes.timespan}`}>
+        <div className={classes.timespan}>
           {startString} to {endString}
         </div>
       </Typography>
 
       {/* Work description */}
-      <Typography
-        variant="body2"
-        className={`${classes.row} ${classes.description}`}
-      >
+      <Typography variant="body2" className={classes.row}>
         {description}
       </Typography>
 
