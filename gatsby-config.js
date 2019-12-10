@@ -13,13 +13,13 @@ module.exports = {
         display: 'minimal-ui',
         icon: 'src/assets/favicon.png', // This path is relative to the root of the site.
       },
-    },    
+    },
     'gatsby-plugin-top-layout',
     'gatsby-plugin-material-ui',
     {
       resolve: `gatsby-plugin-layout`,
       options: {
-        component: require.resolve(`./src/components/layout.js`),
+        component: require.resolve(`./src/components/layout/index.js`),
       },
     },
     'gatsby-plugin-offline',

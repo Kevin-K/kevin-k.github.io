@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { resume } from '../styles/resume';
 import resumeData from '../assets/resume.json';
 import Heading from '../components/resume/heading';
 import Content from '../components/resume/content';
@@ -12,7 +11,16 @@ import Skill from '../components/resume/skill';
 // Build out the styles from the common libraries
 // add the resume page theme to the layout's content
 const useStyles = makeStyles(theme => ({
-  page: resume(theme),
+  page: {
+    textAlign: 'left',
+    '& > :not(:first-child)': {
+      paddingTop: theme.spacing(),
+    },
+    '& > :not(:last-child)': {
+      borderBottom: 'solid 1px #CFCFCF',
+      paddingBottom: theme.spacing(),
+    },
+  },
 }));
 
 const ResumePage = props => {
