@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import resumeData from '../assets/resume.json';
 import Heading from '../components/resume/heading';
 import Content from '../components/resume/content';

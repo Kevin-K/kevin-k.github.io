@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
   page: {
     minHeight: '100vh',
     margin: `auto`,
+    overflow: 'auto',
     maxWidth: theme.breakpoints.values.md - drawerWidth,
     padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
 

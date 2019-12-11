@@ -27,13 +27,6 @@ const BlogPage = ({ data }) => {
     <div>
       {posts.map(({ node }) => (
         <Card className={classes.card}>
-          <CardMedia
-            className={classes.icon}
-            component="img"
-            alt="Blog Topic"
-            image="https://via.placeholder.com/100"
-            title=""
-          />
           <CardContent className={classes.content}>
             <Typography variant="h5">
               <div>{node.frontmatter.title}</div>
