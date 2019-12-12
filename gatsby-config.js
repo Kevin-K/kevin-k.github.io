@@ -1,6 +1,20 @@
 module.exports = {
   siteMetadata: {
     title: 'Kevin J. Kelly',
+    navLinks: [
+      {
+        title: 'Resume',
+        path: '/resume',
+      },
+      {
+        title: 'Blog',
+        path: '/blog',
+      },
+      {
+        title: 'Contact',
+        path: '/contact',
+      },
+    ],
   },
   plugins: [
     'gatsby-plugin-react-helmet',

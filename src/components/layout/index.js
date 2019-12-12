@@ -49,6 +49,10 @@ const Layout = ({ children, location }) => {
           site {
             siteMetadata {
               title
+              navLinks {
+                title
+                path
+              }
             }
           }
         }
@@ -60,6 +64,7 @@ const Layout = ({ children, location }) => {
           </Helmet>
           <SideNav
             title={data.site.siteMetadata.title}
+            navLinks={data.site.siteMetadata.navLinks}
             classes={{
               paperAnchorLeft: classes.nav,
             }}
@@ -67,7 +72,7 @@ const Layout = ({ children, location }) => {
             anchor="left"
           />
           <div className={classes.frame}>
-            <Card className={classes.page}>{children}</Card>
+            <div className={classes.page}>{children}</div>
           </div>
         </div>
       )}
