@@ -1,14 +1,25 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import blueGrey from '@material-ui/core/colors/blueGrey';
-import grey from '@material-ui/core/colors/grey';
 
 export default createMuiTheme({
-  palette: {
-    primary: blueGrey,
-    secondary: grey,
-  },
   typography: {
-    useNextVariants: true,
     fontSize: 12,
+    h1: {
+      fontSize: 40,
+    },
+    h2: {
+      fontSize: 32,
+    },
+    h3: {
+      fontSize: 28,
+    },
+    h4: {
+      fontSize: 24,
+    },
+    h5: {
+      fontSize: 20,
+    },
+    h6: {
+      fontSize: 16,
+    },
   },
 });

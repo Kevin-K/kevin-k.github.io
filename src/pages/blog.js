@@ -1,44 +1,39 @@
 import React from 'react';
 import { Link } from 'gatsby';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
-  card: {
-    display: 'flex',
-    margin: `${theme.spacing(3)}px`,
+  article: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(4),
   },
-  icon: {
-    flex: 0,
-    hieght: '100px',
-    width: '100px',
-  },
-  content: {
-    flex: 1,
+  link: {
+    textDecoration: 'none',
   },
 }));
-const BlogPage = ({ data }) => {
+
+const Post = ({ path, title, description, date }) => {
   const classes = useStyles();
+  return (
+    <div className={classes.article}>
+      <Typography variant="h2">
+        <Link to={path} className={classes.link}>
+          {title}
+        </Link>
+      </Typography>
+      <Typography variant="subtitle1">{date}</Typography>
+      <Typography variant="subtitle2">{description}</Typography>
+    </div>
+  );
+};
+
+const BlogPage = ({ data }) => {
   const posts = data.allMdx.edges;
   return (
     <div>
       {posts.map(({ node }) => (
-        <Card className={classes.card}>
-          <CardContent className={classes.content}>
-            <Typography variant="h5">
-              <div>{node.frontmatter.title}</div>
-            </Typography>
-            <Typography variant="body">
-              <div>{node.frontmatter.description}</div>
-              <div>
-                <Link to={node.frontmatter.path}>Read</Link>
-              </div>
-            </Typography>
-          </CardContent>
-        </Card>
+        <Post {...node.frontmatter} />
       ))}
     </div>
   );
@@ -62,6 +57,7 @@ export const query = graphql`
             title
             description
             path
+            icon
           }
         }
       }
