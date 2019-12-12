@@ -57,7 +57,6 @@ export const query = graphql`
             title
             description
             path
-            icon
           }
         }
       }

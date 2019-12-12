@@ -23,7 +23,11 @@ const SideNav = props => {
         </ListItem>
         <Divider />
         {navLinks.map(({ title, path }) => (
-          <ListItem button onClick={() => navigate(path)} {...other}>
+          <ListItem
+            button
+            onClick={() => navigate(path)}
+            selected={path === withPrefix(curPath)}
+          >
             <ListItemText primary={title} />
           </ListItem>
         ))}

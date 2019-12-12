@@ -4,7 +4,6 @@ import Helmet from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
 import { StaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
-import Card from '@material-ui/core/Card';
 
 export const drawerWidth = 145;
 const useStyles = makeStyles(theme => ({
