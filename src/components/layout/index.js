@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
-import { StaticQuery, graphql } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
 
 export const drawerWidth = 145;
@@ -39,43 +39,41 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Layout = ({ children, location }) => {
-  const classes = useStyles();
-  return (
-    <StaticQuery
-      query={graphql`
-        query SiteTitleQuery {
-          site {
-            siteMetadata {
-              title
-              navLinks {
-                title
-                path
-              }
-            }
-          }
+const query = graphql`
+  query SiteTitleQuery {
+    site {
+      siteMetadata {
+        title
+        navLinks {
+          title
+          path
         }
-      `}
-      render={data => (
-        <div className={classes.root}>
-          <Helmet title={data.site.siteMetadata.title} meta={[]}>
-            <html lang="en" />
-          </Helmet>
-          <SideNav
-            title={data.site.siteMetadata.title}
-            navLinks={data.site.siteMetadata.navLinks}
-            classes={{
-              paperAnchorLeft: classes.nav,
-            }}
-            location={location}
-            anchor="left"
-          />
-          <div className={classes.frame}>
-            <div className={classes.page}>{children}</div>
-          </div>
-        </div>
-      )}
-    />
+      }
+    }
+  }
+`;
+
+export default function Layout({ children, location }) {
+  const classes = useStyles();
+  const data = useStaticQuery(query);
+  return (
+    <div className={classes.root}>
+      <Helmet title={data.site.siteMetadata.title} meta={[]}>
+        <html lang="en" />
+      </Helmet>
+      <SideNav
+        title={data.site.siteMetadata.title}
+        navLinks={data.site.siteMetadata.navLinks}
+        classes={{
+          paperAnchorLeft: classes.nav,
+        }}
+        location={location}
+        anchor="left"
+      />
+      <div className={classes.frame}>
+        <div className={classes.page}>{children}</div>
+      </div>
+    </div>
   );
 };
 
@@ -83,4 +81,3 @@ Layout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default Layout;
