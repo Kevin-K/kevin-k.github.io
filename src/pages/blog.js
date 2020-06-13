@@ -28,7 +28,7 @@ const Post = ({ path, title, description, date }) => {
   );
 };
 
-const BlogPage = ({ data }) => {
+export default function BlogPage({ data }) {
   const posts = data.allMdx.edges;
   return (
     <div>
@@ -37,9 +37,8 @@ const BlogPage = ({ data }) => {
       ))}
     </div>
   );
-};
+}
 
-export default BlogPage;
 
 export const query = graphql`
   query {

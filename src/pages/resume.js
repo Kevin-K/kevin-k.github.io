@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ResumePage = props => {
+export default function ResumePage() {
   const classes = useStyles();
   return (
     <div className={classes.page}>
@@ -59,6 +59,4 @@ const ResumePage = props => {
       </Content>
     </div>
   );
-};
-
-export default ResumePage;
+}

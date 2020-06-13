@@ -1,12 +1,14 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+
 const useStyles = makeStyles(theme => ({
   page: {
     padding: theme.spacing(2),
   },
 }));
-const ContactPage = props => {
+
+export default function ContactPage() {
   const classes = useStyles();
   return (
     <div className={classes.page}>
@@ -17,6 +19,5 @@ const ContactPage = props => {
       </Typography>
     </div>
   );
-};
+}
 
-export default ContactPage;
