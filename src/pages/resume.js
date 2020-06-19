@@ -1,12 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import resumeData from '../assets/resume.json';
-import Heading from '../components/resume/heading';
-import Content from '../components/resume/content';
-import Work from '../components/resume/work';
-import Volunteer from '../components/resume/volunteer';
-import Education from '../components/resume/education';
-import Skill from '../components/resume/skill';
+import { Heading, Content, Work, Volunteer, Education, Skills } from 'resume-react';
 
 // Build out the styles from the common libraries
 // add the resume page theme to the layout's content
@@ -54,7 +49,7 @@ export default function ResumePage() {
       </Content>
       <Content title="SKILLS">
         {resumeData.skills.map(entry => (
-          <Skill {...entry} key={`${entry.name}-${entry.level}`} />
+          <Skills {...entry} key={`${entry.name}-${entry.level}`} />
         ))}
       </Content>
     </div>
