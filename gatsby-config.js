@@ -3,17 +3,17 @@ module.exports = {
     title: 'Kevin J. Kelly',
     navLinks: [
       {
-        title: 'Resume',
-        path: '/resume',
-      },
-      {
         title: 'Blog',
         path: '/blog',
       },
       {
-        title: 'Contact',
-        path: '/contact',
+        title: 'About',
+        path: '/about',
       },
+      {
+        title: 'Resume',
+        path: '/resume',
+      }
     ],
   },
   plugins: [

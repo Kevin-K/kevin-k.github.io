@@ -4,32 +4,15 @@ import Helmet from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStaticQuery, graphql } from 'gatsby';
-import SideNav from './sidenav';
-
-export const drawerWidth = 145;
+import Nav, { navHeight } from './nav';
+import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles(theme => ({
   root: {},
-  nav: {
-    width: drawerWidth,
-
-    // remove nav on print
-    '@media print': {
-      display: 'none',
-    },
-  },
-  frame: {
-    marginLeft: drawerWidth,
-
-    // remove nav margin on print
-    '@media print': {
-      marginLeft: 0,
-    },
-  },
   page: {
-    minHeight: '100vh',
+    minHeight: `calc(100vh - ${navHeight}px)`,
     margin: `auto`,
     overflow: 'auto',
-    maxWidth: theme.breakpoints.values.md - drawerWidth,
+    maxWidth: theme.breakpoints.values.md,
     padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
 
     // remove extra space and card effect on print
@@ -64,20 +47,15 @@ export default function Layout({ children, location }) {
         <html lang="en" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Helmet>
-      <div className={classes.root}>
-        <SideNav
-          title={data.site.siteMetadata.title}
-          navLinks={data.site.siteMetadata.navLinks}
-          classes={{
-            paperAnchorLeft: classes.nav,
-          }}
-          location={location}
-          anchor="left"
-        />
-        <div className={classes.frame}>
-          <div className={classes.page}>{children}</div>
-        </div>
-      </div>
+      <Nav
+        title={data.site.siteMetadata.title}
+        navLinks={data.site.siteMetadata.navLinks}
+        location={location}
+        anchor="left"
+      />
+      <Paper classes={{ root: classes.page }} elevation={0}>
+        {children}
+      </Paper>
     </>
   );
 };
