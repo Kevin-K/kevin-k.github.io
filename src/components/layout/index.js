@@ -42,7 +42,6 @@ export default function Layout({ children, location }) {
   const data = useStaticQuery(query);
   return (
     <>
-      <CssBaseline />
       <Helmet title={data.site.siteMetadata.title} meta={[]}>
         <html lang="en" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
