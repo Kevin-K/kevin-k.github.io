@@ -17,7 +17,6 @@ module.exports = {
     ],
   },
   plugins: [
-    'gatsby-plugin-react-helmet',
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -29,13 +28,22 @@ module.exports = {
       },
     },
     'gatsby-plugin-top-layout',
-    'gatsby-plugin-material-ui',
+    {
+      resolve: 'gatsby-plugin-material-ui',
+      // If you want to use styled components you should change the injection order.
+      options: {
+        // stylesProvider: {
+        //   injectFirst: true,
+        // },
+      },
+    },
     {
       resolve: `gatsby-plugin-layout`,
       options: {
         component: require.resolve(`./src/components/layout/index.js`),
       },
     },
+    'gatsby-plugin-react-helmet',
     'gatsby-plugin-offline',
     'gatsby-plugin-netlify-cms',
     {
