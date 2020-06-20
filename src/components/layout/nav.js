@@ -7,11 +7,12 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { Link } from 'gatsby';
 import { makeStyles } from '@material-ui/core/styles';
-
 export const navHeight = 48;
 const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
+    whiteSpace: 'pre',
+    pointerEvents: 'none',
     marginTop: theme.spacing(),
     marginLeft: theme.spacing()
   },
@@ -21,6 +22,9 @@ const useStyles = makeStyles(theme => ({
     '@media print': {
       display: 'none',
     },
+  },
+  bar: {
+    display: 'flex',
   }
 }));
 
@@ -30,14 +34,16 @@ const Nav = props => {
   const classes = useStyles();
   return (
     <AppBar position="relative" classes={{ root: classes.root }}>
-      <Tabs value={withPrefix(curPath)} variant="fullWidth">
+      <div className={classes.bar}>
         <Typography variant="h3" className={classes.title}>
           {title}
         </Typography>
-        {navLinks.map(({ title, path }) => (
-          <Tab label={title} to={path} value={withPrefix(path)} component={Link} />
-        ))}
-      </Tabs>
+        <Tabs value={withPrefix(curPath)}>
+          {navLinks.map(({ title, path }) => (
+            <Tab label={title} to={path} value={withPrefix(path)} component={Link} key={title} />
+          ))}
+        </Tabs>
+      </div>
     </AppBar>
   );
 };
