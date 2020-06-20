@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStaticQuery, graphql } from 'gatsby';
 import SideNav from './sidenav';
 
@@ -57,23 +58,27 @@ export default function Layout({ children, location }) {
   const classes = useStyles();
   const data = useStaticQuery(query);
   return (
-    <div className={classes.root}>
+    <>
+      <CssBaseline />
       <Helmet title={data.site.siteMetadata.title} meta={[]}>
         <html lang="en" />
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Helmet>
-      <SideNav
-        title={data.site.siteMetadata.title}
-        navLinks={data.site.siteMetadata.navLinks}
-        classes={{
-          paperAnchorLeft: classes.nav,
-        }}
-        location={location}
-        anchor="left"
-      />
-      <div className={classes.frame}>
-        <div className={classes.page}>{children}</div>
+      <div className={classes.root}>
+        <SideNav
+          title={data.site.siteMetadata.title}
+          navLinks={data.site.siteMetadata.navLinks}
+          classes={{
+            paperAnchorLeft: classes.nav,
+          }}
+          location={location}
+          anchor="left"
+        />
+        <div className={classes.frame}>
+          <div className={classes.page}>{children}</div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
