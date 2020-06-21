@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: 'pre',
     pointerEvents: 'none',
     marginTop: theme.spacing(),
-    marginLeft: theme.spacing()
+    marginLeft: theme.spacing(),
   },
   root: {
     height: `${navHeight}px`,
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
   bar: {
     display: 'flex',
-  }
+  },
 }));
 
 const Nav = props => {
@@ -35,12 +35,18 @@ const Nav = props => {
   return (
     <AppBar position="relative" classes={{ root: classes.root }}>
       <div className={classes.bar}>
-        <Typography variant="h3" className={classes.title}>
+        <Typography variant="h5" className={classes.title}>
           {title}
         </Typography>
         <Tabs value={withPrefix(curPath)}>
           {navLinks.map(({ title, path }) => (
-            <Tab label={title} to={path} value={withPrefix(path)} component={Link} key={title} />
+            <Tab
+              label={title}
+              to={path}
+              value={withPrefix(path)}
+              component={Link}
+              key={title}
+            />
           ))}
         </Tabs>
       </div>
