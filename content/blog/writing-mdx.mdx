@@ -1,0 +1,81 @@
+---
+path: /blog/writing-mdx
+date: 2020-06-20T03:54:55.905Z
+title: Writing MDX
+description: Markdown + JS? Count me in.
+---
+
+# Writing MDX
+
+What is MDX? Its Markdown + JSX.
+I haven't taken the time to learn the powers of that extra **X**,
+and what better way than with rambling out my discoveries as a blog post.
+
+## Background
+
+I've been using markdown as long as I've used git,
+most commonly writing up the everpresent `README.md` document, but also for
+documentation for libraries.
+
+For a project I contributed back in 2016 we needed
+some form of interactive documentation for our github page content, allowing
+developers to see live results of JavaScript running along side the docs.
+
+At the time, we leveraged [codepen](codepen.io) iframes to embed running code
+within our docs, it gave us interaction and the bonus of having sandbox-able code
+in front of users. The documents don't appear to have stood up to the test of time,
+the codepens haven't been kept up and runnable but here's a
+[reference of where I am coming from](https://ozoneplatform.github.io/ozp-iwc/1.2.2/tutorial/02_dataApi.html).
+
+## Diving in
+
+This blog, at the time of writing, is running on [Gatsby](https://www.gatsbyjs.org/). The
+documentation [here](https://www.gatsbyjs.org/docs/mdx/getting-started/) will getting your
+Gatsby site up and running with MDX.
+
+Everything you've read up to this sentence has been good old markdown. It's time
+to leap into the beyond!
+
+#### Here's a Slider (material-ui)
+
+import Slider from '@material-ui/core/Slider';
+
+<Slider />
+
+Cool that was a slider, but wait, this is a markdown document, how did I get a
+react component in here? MDX lets you mix in JSX valid syntax within your
+markdown content. Here's what was coded behind the scene to bring you
+that sweet slider:
+
+```jsx
+import Slider from '@material-ui/core/Slider';
+
+<Slider />
+```
+
+MDX supports the [remark](https://github.com/remarkjs/remark/blob/master/doc/plugins.md)
+plugin ecosystem, I actually paused mid-writing this post to add the
+[gatsby-remark-prismjs](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/)
+plugin to my gatsby site so I could start putting
+code snippets and interaction within my posts.
+
+## Other things to note
+It looks like since we can use JSX, we can add in non-componentized HTML.
+<div style={{display: 'flex'}}>
+  <span style={{ flex:1, fontColor: 'red' }}>TEST</span>
+  <span style={{ flex:1,  fontSize: 8 }}>TEST</span>
+  <span style={{ flex:1,  fontSize: 4 }}>TEST</span>
+</div>
+
+Here's the snippet I dropped in my MDX to create the above example:
+```jsx
+<div style={{display: 'flex'}}>
+  <span style={{ flex:1, fontColor: 'red' }}>TEST</span>
+  <span style={{ flex:1,  fontSize: 8 }}>TEST</span>
+  <span style={{ flex:1,  fontSize: 4 }}>TEST</span>
+</div>
+```
+
+It looks like this pairing of markdown and JSX will help suite my needs.
+I'm not sure it solves all our web-content struggles, but I now have a 
+better idea of how I can compose technical blog posts in a collocated manner.
