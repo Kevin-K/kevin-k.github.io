@@ -1,0 +1,234 @@
+---
+path: /blog/building-a-resume
+date: 2019-12-10T03:54:55.905Z
+title: Building a Resume with React
+description: My journey through component design itteration
+---
+import Heading from "../../src/components/resume/heading"
+import old_resume_snippet from '../../src/assets/old_resume_snippet.jpg';
+import old_resume_snippet_monolithic from '../../src/assets/old_resume_snippet_monolithic.jpg';
+
+## How my [resume](/resume) was created 
+
+I've used a great tool for the last few years to manage my resume,
+[JSON Resume](https://jsonresume.org/). If you are looking for a 
+tool to quickly structure a resume it's worth a look. Given some JSON and 
+a selected theme, you can quickly export a resume to PDF or HTML.
+
+I was in the process of building this website to host my resume and hobby 
+projects and decided to take my resume and recreated it in React. The reason? 
+This website is built with [Gatsby](https://www.gatsbyjs.org/), which gives you 
+the ability to pulling static content into a page through GraphQL.
+
+## Desired Output
+
+1. The resume renders in a "print" format on desktop.
+2. The resume renders in a readable format on mobile.
+3. The resume can be printed from the browser (and saved to PDF).
+
+## The Approach
+I had at one point in time forked the [onepage theme](https://github.com/Kevin-K/jsonresume-theme-onepage)
+from JSON Resume for some minor style tweaks, so I thankfully had an existing
+product to work from.
+
+<figure>
+<img src={old_resume_snippet} style={{display: 'block', width: 400, margin: 'auto'}}/>
+<figcaption style={{textAlign: 'center'}}> <i>An excerpt of my old JSON Resume</i> </figcaption>
+</figure>
+
+I find often when working against a mockup it helps to carve out your React componentry 
+with a top-down approach. Reusable code can be found through itterating through a design
+from the top-down, so to begin I envisioned creating a monolithic resume component.
+
+---
+
+### Itteration 1: 1 Component to Rule them all
+
+<figure>
+<img src={old_resume_snippet_monolithic} style={{display: 'block', width: 400, margin: 'auto'}}/>
+<figcaption style={{textAlign: 'center'}}> <i>A monolithic Resume component</i> </figcaption>
+</figure>
+
+### Pros
+- One file.
+- Migration of HTML/CSS from existing JSON Resume would be fast
+
+### Cons
+- Low reusability
+- High code complexity
+
+The pros here are file simplicity, I could toss everything in one file and call it a day,
+should I need to revisit the resume in the future all I'll need to do is open my `resume.js`
+file and modify my component.
+
+The number of properties applied onto the resume component will be high. That is
+not of great concern to me, as I view this component as serving a single purpose.
+
+
+```js
+<Resume
+    name="Kevin Kelly"
+    title="Senior Software Engineer"
+    email="kevin@kevinjkelly.net"
+    phone="(555) 555-5555"
+    summary="Kevin is an experienced software engineer with  ..."
+    experience={[
+        {
+            company: "StealthPath, Inc",
+            title: "Senior Software Engineer",
+            startDate: "2017-07-01",
+            endDate: "present"
+            achievements: [
+                "Team lead and lead front-end developer for ...",
+                "Managed and mentored web development efforts ...",
+                //...
+            ]
+
+        }
+    ]}
+    volunteer={[/*...*/]}
+    education={[/*...*/]}
+    skills={[/*...*/]}
+    />
+```
+
+
+This lacks code reusability. If I want to create a modified resume layout my options
+are to either:
+
+1. Copy and paste the Resume component code. **Bad: Duplicated logic**
+2. Add the modified layout to the Resume component and add a prop to select the
+modified layout. **Bad: God component**
+
+It's not evident yet, but there's an abundance of functionality within this
+one component. At this point in the design itteration I give my code the
+"test smell-test"
+
+---
+
+### Itteration 2: Now with Smell-O-Vision
+
+#### Test Smell-Test
+*How painful is testing this going to be?*
+
+Break down what you would test in your component. If this list is long, try and find some
+commonalities of your tests. This may shed some light on a reusable component to
+break out.
+
+1. Name is rendered.
+2. Title is rendered.
+3. Address is rendered.
+4. Email is rendered.
+5. Phone number is rendered.
+6. "SUMMARY" category title is rendered.
+6. Summary content is rendered.
+7. "EXPERIENCE" category title is rendered.
+8. Each job: company is rendered.
+9. Each job: title is rendered.
+10. Each job: timeframe is rendered.
+11. Each job: each achievement is rendered.
+12. "VOLUNTEER" category title is rendered.
+13. Each volunteer: company is rendered.
+14. Each volunteer: title is rendered.
+15. Each volunteer: timeframe is rendered.
+16. Each volunteer: each achievement is rendered.
+17. "EDUCATION" category title is rendered.
+18. Each education: school is rendered.
+19. Each education: degree is rendered.
+20. Each education: timeframe is rendered.
+21. Each education: GPA is rendered.
+22. "SKILLS" category title is rendered.
+23. Each skill: skill group is rendered.
+24. Each skill group: individual skills are rendered.
+
+Reading through my test cases, I see a pattern arise between each section
+of the resume below the header:
+
+1. A category title is rendered.
+2. Some content is rendered.
+
+I could potentially break my Resume component down to use a Content component.
+This would reduce the duplication of logic within my Resume that would be applied to 
+each content section.
+
+/// put mockup here for with content component.
+
+
+#### Content commenalities
+I could go further to say within the content there are additional coorelations,
+like how the "EXPERIENCE" section and "VOLUNTEER" section have matching
+test criterias and the style of each content section is identical.
+
+Looks like I can use a single component to handle both sections. Out of fear
+of pre-mature optimization, I'm going to create a component for each 
+content section, but let the "VOLUNTEER" section compoent call the "WORK" 
+section component.
+
+/// put mockup here with work and volunteer components
+
+The "EDUCATION" section seems to closely match "EXPERIENCE" as well.
+I see that my resume's education section includes a school, thats like a 
+company (in data labeling form, I'm not knocking our education system), but
+the GPA render doesn't coorelate to the achievement render.
+The "EXPERIENCE" achievements are a list for each job, but I have only
+one GPA for each "EDUCATION" degree. Slightly lost? Me too. This looks
+like **pre-mature optimizaiton**. When I hit a point where
+a extraction isn't crystal clear I back off. It looks like "EDUCATION"
+and "SKILLS" for now will be their own components.
+
+Rome wasn't built in a day, and the cleanest code wasn't built in one
+itteration. Extracting code often poses new challenges, so I 
+err on the side of caution. Extract too much? You're now dealing
+with component hell. Extract too little? You're not getting
+"clean cuts" of your components for reusability.
+
+---
+
+### Itteration 3: Sweeping under the Rug
+
+At this point I'm happy with the reduction in code duplication, by
+structuring each section of my resume into `Content` blocks containing 
+`Work`, `Volunteer`, `Education`, and `Skill` components, my resume
+only contains a chunk of unique logic that pertains to showing my name,
+title, contact details. The summary is just a text blurb, so
+it can be a child of a `Content` block, no need for extra components.
+
+Moving the heading logic into its own component isn't saving any lines
+of code. If anything its adding more files to the project to manage.
+For future reusability sake I want to make the heading its own component,
+I may place it elsewhere on my projects as my signature, and it would be
+silly to import from my resume to gain a shared lower-level component.
+
+
+
+## End Structure
+The content used as the resume asset can be found [here](https://raw.githubusercontent.com/Kevin-K/kevin-k.github.io/815ac2295cbba8325af1adb1568fefdf84194aaa/src/assets/resume.json).
+```js
+import resumeData from '../assets/resume.json';
+const Resume = props => (<div>
+      <Heading {...resumeData.basics} />
+      <Content title="SUMMARY">
+        <span> {resumeData.basics.summary}</span>
+      </Content>
+      <Content title="EXPERIENCE">
+        {resumeData.work.map(entry => (
+          <Work {...entry} key={`${entry.name}-${entry.startDate}`} />
+        ))}
+      </Content>
+      <Content title="VOLUNTEER">
+        {resumeData.volunteer.map(entry => (
+          <Volunteer {...entry} key={`${entry.name}-${entry.startDate}`} />
+        ))}
+      </Content>
+      <Content title="EDUCATION">
+        {resumeData.education.map(entry => (
+          <Education {...entry} key={`${entry.name}-${entry.startDate}`} />
+        ))}
+      </Content>
+      <Content title="SKILLS">
+        {resumeData.skills.map(entry => (
+          <Skill {...entry} key={`${entry.name}-${entry.level}`} />
+        ))}
+      </Content>
+    </div>);
+```
