@@ -13,15 +13,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Post({ path, title, description, date }) {
+export default function Post({ slug, title, description, date, duration }) {
   const classes = useStyles();
   return (
     <div className={classes.article}>
-      <Typography variant="subtitle1">{date}</Typography>
       <Typography variant="h5">
-        <Link to={path} className={classes.link}>
+        <Link to={slug} className={classes.link}>
           {title}
         </Link>
+      </Typography>
+      <Typography variant="p">
+        {date} - {duration}
       </Typography>
       <Typography variant="subtitle2">{description}</Typography>
     </div>
