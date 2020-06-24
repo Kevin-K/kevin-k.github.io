@@ -181,7 +181,7 @@ end
 ```
 
 
-#### 3. Ensure you have flash messages in app/views/layouts/application.html.erb.
+##### 3. Ensure you have flash messages in app/views/layouts/application.html.erb.
 We'll just add the example snippet above the yield.
 
 ```erb
@@ -189,7 +189,7 @@ We'll just add the example snippet above the yield.
     <p class="alert"><%= alert %></p>
 ```
 
-##### views/layouts/application.html.erb
+###### views/layouts/application.html.erb
 
 ```erb
 <!DOCTYPE html>
@@ -212,10 +212,100 @@ We'll just add the example snippet above the yield.
 
 ```
 
-###   4. You can copy Devise views (for customization) to your app
+######   4. You can copy Devise views (for customization) to your app
 No action needed here, but good to know to break free of the default for own styling.
 If you want to you can run the following.
 
 ```bash
 rails g devise:views
 ```
+
+#### Adding Users
+
+At this point the necessities to use Devise are aligned, but we don't have a model leveraging it.
+A typical approach is to use the `User` model for authentication purposes. We don't have that model
+yet, but devise can create it for us.
+
+```bash
+rails generate devise User
+```
+
+Now our user model has some devise modules added
+
+##### app/models/user.rb
+
+```rb
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+end
+```
+
+#### But I don't have to Log In?
+At this point if you navigate to your app's root (remember we only have a Home controller),
+you'll see it without logging in. Devise treats authentication as an opt-in action.
+
+If you want to add authentication to only the Home controller's routes you can use the following.
+
+##### app/controllers/home_controller.rb
+
+```rb
+class HomeController < ApplicationController
+  before_action :authenticate_user!
+  def index
+  end
+end
+```
+
+If you are building an app where you want all routes to require authentication, you can lift the `before_action`
+up to the ApplicationController (root controller which others inherit from).
+
+##### app/controllers/application_controller
+
+```rb
+class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
+  def index
+  end
+end
+```
+
+For the purposes of this example I'm going with the latter (all routes get `authenticate_user!`).
+
+
+### Voila!
+You're app now has user authentication. Devise provides a lot of functionality out of the box. We don't see
+the controller/views of devise because we didnt run the view generation (`rails g devise:views`) but
+theres a handfull of things ready to go now. Before breaking down the modules included in the `User` model,
+take a moment to play with the sign in, sign out, sign up, and  forgotten password functionality.
+
+From here, lets break down what devise modules were added during the generation in the `User` model.
+
+##### app/models/user.rb
+
+```rb
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+end
+```
+
+
+#### database_authenticatable
+
+#### registerable
+
+#### recoverable
+
+#### rememberable
+
+#### validatable
+
+
+
+
+
