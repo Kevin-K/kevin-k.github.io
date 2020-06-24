@@ -1,0 +1,221 @@
+---
+date: 2020-06-24
+title: Rails and Devise
+description: Adding authentication to a Rails 6 app
+---
+
+In preperation for a lunch and learn for our engineering staff at [Megaphone](https://www.megaphone.fm) on authentication & authorization,
+I found myself wondering what setting up Devise looks like in Rails 6 (we've been running a Rails app that we've pushed to upgrade from 4 -> 6).
+Devise has [great documentation](https://github.com/heartcombo/devise#getting-started) to get you going, you'll find steps to setup there, 
+but I'm captain's logging my work here as well. Without further adiue, lets dive right in.
+
+
+#### Creating a new app
+
+```bash
+rails new sandbox
+```
+
+By default a rails app is _fairly_ thin, no authentication is provided off the back.
+
+##### Gemfile
+```rb
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.6.3'
+
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
+# Use sqlite3 as the database for Active Record
+gem 'sqlite3', '~> 1.4'
+# Use Puma as the app server
+gem 'puma', '~> 4.1'
+# Use SCSS for stylesheets
+gem 'sass-rails', '>= 6'
+# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem 'webpacker', '~> 4.0'
+# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+gem 'turbolinks', '~> 5'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 2.7'
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 4.0'
+# Use Active Model has_secure_password
+# gem 'bcrypt', '~> 3.1.7'
+
+# Use Active Storage variant
+# gem 'image_processing', '~> 1.2'
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.4.2', require: false
+
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+end
+
+group :development do
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem 'web-console', '>= 3.3.0'
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+group :test do
+  # Adds support for Capybara system testing and selenium driver
+  gem 'capybara', '>= 2.15'
+  gem 'selenium-webdriver'
+  # Easy installation and use of web drivers to run system tests with browsers
+  gem 'webdrivers'
+end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+```
+
+#### Adding Devise
+
+We'll need to add Devise since it doesn't ship with Rails.
+
+##### Gemfile
+
+```
+gem 'devise'
+```
+
+Then we'll run a bundle install and the generator for devise additions.
+
+```bash
+bundle install
+rails generate devise:install
+```
+
+With all that installed, Devise will waarn of a few things needing to be ensured
+
+```
+Running via Spring preloader in process 43860
+      create  config/initializers/devise.rb
+      create  config/locales/devise.en.yml
+===============================================================================
+
+Depending on your application's configuration some manual setup may be required:
+
+  1. Ensure you have defined default url options in your environments files. Here
+     is an example of default_url_options appropriate for a development environment
+     in config/environments/development.rb:
+
+       config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+     In production, :host should be set to the actual host of your application.
+
+     * Required for all applications. *
+
+  2. Ensure you have defined root_url to *something* in your config/routes.rb.
+     For example:
+
+       root to: "home#index"
+     
+     * Not required for API-only Applications *
+
+  3. Ensure you have flash messages in app/views/layouts/application.html.erb.
+     For example:
+
+       <p class="notice"><%= notice %></p>
+       <p class="alert"><%= alert %></p>
+
+     * Not required for API-only Applications *
+
+  4. You can copy Devise views (for customization) to your app by running:
+
+       rails g devise:views
+       
+     * Not required *
+
+===============================================================================
+```
+
+##### 1. Ensure you have defined default url options in your environments files.
+
+This one is asking us to place a default url for our action mailer for the development 
+environment, adding the following suffices.
+
+##### config/environments/development.rb
+
+```rb
+Rails.application.configure do
+    # ... existing content
+    config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+end
+```
+
+##### 2. Ensure you have defined root_url to *something* in your config/routes.rb.
+
+We haven't defined any routes in our app yet.
+
+##### config/routes.rb
+
+```rb
+Rails.application.routes.draw do
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+end
+```
+
+Lets add a Home controller with an index.
+
+```bash
+rails generate Home index
+```
+
+Now we can satisfy that root_url
+
+##### config/routes.rb
+
+```rb
+Rails.application.routes.draw do
+  get 'home/index'
+  root :to => "home#index"
+end
+```
+
+
+#### 3. Ensure you have flash messages in app/views/layouts/application.html.erb.
+We'll just add the example snippet above the yield.
+
+```erb
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+```
+
+##### views/layouts/application.html.erb
+
+```erb
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sandbox</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+    <%= yield %>
+  </body>
+</html>
+
+```
+
+###   4. You can copy Devise views (for customization) to your app
+No action needed here, but good to know to break free of the default for own styling.
+If you want to you can run the following.
+
+```bash
+rails g devise:views
+```
