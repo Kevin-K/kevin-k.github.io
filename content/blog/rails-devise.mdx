@@ -10,7 +10,7 @@ Devise has [great documentation](https://github.com/heartcombo/devise#getting-st
 but I'm captain's logging my work here as well. Without further adiue, lets dive right in.
 
 
-#### Creating a new app
+## Creating a new app
 
 ```bash
 rails new sandbox
@@ -76,7 +76,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 ```
 
-#### Adding Devise
+## Adding Devise
 
 We'll need to add Devise since it doesn't ship with Rails.
 
@@ -137,7 +137,7 @@ Depending on your application's configuration some manual setup may be required:
 ===============================================================================
 ```
 
-##### 1. Ensure you have defined default url options in your environments files.
+### 1. Ensure you have defined default url options in your environments files.
 
 This one is asking us to place a default url for our action mailer for the development 
 environment, adding the following suffices.
@@ -151,7 +151,7 @@ Rails.application.configure do
 end
 ```
 
-##### 2. Ensure you have defined root_url to *something* in your config/routes.rb.
+### 2. Ensure you have defined root_url to *something* in your config/routes.rb.
 
 We haven't defined any routes in our app yet.
 
@@ -181,7 +181,7 @@ end
 ```
 
 
-##### 3. Ensure you have flash messages in app/views/layouts/application.html.erb.
+### 3. Ensure you have flash messages in app/views/layouts/application.html.erb.
 We'll just add the example snippet above the yield.
 
 ```erb
@@ -212,7 +212,7 @@ We'll just add the example snippet above the yield.
 
 ```
 
-######   4. You can copy Devise views (for customization) to your app
+### 4. You can copy Devise views (for customization) to your app
 No action needed here, but good to know to break free of the default for own styling.
 If you want to you can run the following.
 
@@ -220,7 +220,7 @@ If you want to you can run the following.
 rails g devise:views
 ```
 
-#### Adding Users
+## Adding Users
 
 At this point the necessities to use Devise are aligned, but we don't have a model leveraging it.
 A typical approach is to use the `User` model for authentication purposes. We don't have that model
@@ -243,7 +243,7 @@ class User < ApplicationRecord
 end
 ```
 
-#### But I don't have to Log In?
+## But I don't have to Log In?
 At this point if you navigate to your app's root (remember we only have a Home controller),
 you'll see it without logging in. Devise treats authentication as an opt-in action.
 
@@ -275,7 +275,7 @@ end
 For the purposes of this example I'm going with the latter (all routes get `authenticate_user!`).
 
 
-### Voila!
+## Voila!
 You're app now has user authentication. Devise provides a lot of functionality out of the box. We don't see
 the controller/views of devise because we didnt run the view generation (`rails g devise:views`) but
 theres a handfull of things ready to go now. Before breaking down the modules included in the `User` model,
@@ -295,15 +295,15 @@ end
 ```
 
 
-#### database_authenticatable
+### database_authenticatable
 
-#### registerable
+### registerable
 
-#### recoverable
+### recoverable
 
-#### rememberable
+### rememberable
 
-#### validatable
+### validatable
 
 
 
