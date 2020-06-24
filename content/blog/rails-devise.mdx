@@ -223,7 +223,7 @@ rails g devise:views
 ## Adding Users
 
 At this point the necessities to use Devise are aligned, but we don't have a model leveraging it.
-A typical approach is to use the `User` model for authentication purposes. We don't have that model
+A typical approach is to use the User model for authentication purposes. We don't have that model
 yet, but devise can create it for us.
 
 ```bash
@@ -278,10 +278,10 @@ For the purposes of this example I'm going with the latter (all routes get `auth
 ## Voila!
 You're app now has user authentication. Devise provides a lot of functionality out of the box. We don't see
 the controller/views of devise because we didnt run the view generation (`rails g devise:views`) but
-theres a handfull of things ready to go now. Before breaking down the modules included in the `User` model,
+theres a handfull of things ready to go now. Before breaking down the modules included in the User model,
 take a moment to play with the sign in, sign out, sign up, and  forgotten password functionality.
 
-From here, lets break down what devise modules were added during the generation in the `User` model.
+From here, lets break down what devise modules were added during the generation in the User model.
 
 ##### app/models/user.rb
 
@@ -296,16 +296,251 @@ end
 
 
 ### database_authenticatable
+> Authenticatable Module, responsible for hashing the password and
+  validating the authenticity of a user while signing in.
+  This module defines a `password=` method. This method will hash the argument
+  and store it in the `encrypted_password` column, bypassing any pre-existing
+  `password` column if it exists.
+
+Password security is not a simple thing to self handle. Using Devise
+out of the box is giving enough security to shield oneself from issue like 
+"storing passwords in the clear" because the passwords are managed in an encrypted manner.
+Here's an important thing to remember:
+
+#### DON'T ROLL YOUR OWN CRYPTO
+
+The security of an application is an ever-present battle. Technology advancements
+lead to more secure encryption, and also leads to more feasible attacks on encryption.
+Leveraging industry-backed encryption protocols is the smart way to go, and keeping
+libraries providing those protocols up to date is the safe way to go. I won't
+break down the aspects of password encryption in this post, rather point out what
+is configurable. Hopefully this aids in a google search for further clarity.
+
+
+Quoting the source documentation, the DatabaseAuthenticatable module gives 
+us the `password=` functionality on our Users model, and handles the action of 
+encrypting it within the database. Theres a few configurables that trickle into the
+devise config file from this module, they are below.
+
+##### config/initializers/devise.rb
+
+```rb
+Devise.setup do |config|
+  # ...
+  # ==> Configuration for :database_authenticatable
+  # For bcrypt, this is the cost for hashing the password and defaults to 12. If
+  # using other algorithms, it sets how many times you want the password to be hashed.
+  # The number of stretches used for generating the hashed password are stored
+  # with the hashed password. This allows you to change the stretches without
+  # invalidating existing passwords.
+  #
+  # Limiting the stretches to just one in testing will increase the performance of
+  # your test suite dramatically. However, it is STRONGLY RECOMMENDED to not use
+  # a value less than 10 in other environments. Note that, for bcrypt (the default
+  # algorithm), the cost increases exponentially with the number of stretches (e.g.
+  # a value of 20 is already extremely slow: approx. 60 seconds for 1 calculation).
+  config.stretches = Rails.env.test? ? 1 : 12
+  
+  
+  # Set up a pepper to generate the hashed password.
+  # config.pepper = 'b0bb61ca1eb5b207fe642f0beb39cbd0b8169db03ed535ac6921af2a29b5a1b4cae3147c05d954ddd07c6b976fb605488f92fdcb36de551090ddd0dd9eea820b'
+
+  # Send a notification to the original email when the user's email is changed.
+  # config.send_email_changed_notification = false
+
+  # Send a notification email when the user's password is changed.
+  # config.send_password_change_notification = false
+
+end
+```
+
+#### stretches
+This specifies the number of times the password is hashed, for protection against a brute-force
+attack on a password the higher the number the better, but at a performance trade-off.
+
+#### pepper
+A string that is appended to the user's password to be passed to the salt generator as a step
+of the password hash generation.
+
+#### send_email_changed_notification/send_password_change_notification
+Notification flags to email the user on an update to their account.
+
 
 ### registerable
+> Registerable is responsible for everything related to registering a new
+  resource (ie user sign up).
+
+By including this module to the User model, the "Sign Up" functionality is added to the application.
+The controller and view aspects of registration are only active if this module is included.
+A good thing to have on hand for an application which does not allow users to enroll themselves.
+
+For a practical example, remove `:registerable` from the devise call in the User model, and see
+how the application reacts.
+
+There is one configurable for this module.
+
+
+##### config/initializers/devise.rb
+
+```rb
+Devise.setup do |config|
+  # ...
+  # ==> Configuration for :registerable
+
+  # When set to false, does not sign a user in automatically after their password is
+  # changed. Defaults to true, so a user is signed in automatically after changing a password.
+  # config.sign_in_after_change_password = true
+end
+```
 
 ### recoverable
+> Recoverable takes care of resetting the user password and send reset instructions.
+
+This gives the "Forgot your password?" functionality to the application.
+The configurables are below.
+
+##### config/initializers/devise.rb
+
+```rb
+Devise.setup do |config|
+  # ...
+  # ==> Configuration for :recoverable
+  #
+  # Defines which key will be used when recovering the password for an account
+  # config.reset_password_keys = [:email]
+
+  # Time interval you can reset your password with a reset password key.
+  # Don't put a too small interval or your users won't have the time to
+  # change their passwords.
+  config.reset_password_within = 6.hours
+
+  # When set to false, does not sign a user in automatically after their password is
+  # reset. Defaults to true, so a user is signed in automatically after a reset.
+  # config.sign_in_after_reset_password = true
+end
+```
 
 ### rememberable
+> Rememberable manages generating and clearing token for remembering the user
+  from a saved cookie. Rememberable also has utility methods for dealing
+  with serializing the user into the cookie and back from the cookie, trying
+  to lookup the record based on the saved information.
+  You probably wouldn't use rememberable methods directly, they are used
+  mostly internally for handling the remember token.
+
+This is the functionality that allows users to stay logged in on the given
+device/browser for days/weeks/months/years
+(please don't let them stay logged in that long). This is **cookie** based.
+
+
+##### config/initializers/devise.rb
+
+```rb
+Devise.setup do |config|
+  # ...
+  # ==> Configuration for :rememberable
+  # The time the user will be remembered without asking for credentials again.
+  # config.remember_for = 2.weeks
+
+  # Invalidates all the remember me tokens when the user signs out.
+  config.expire_all_remember_me_on_sign_out = true
+
+  # If true, extends the user's remember period when remembered via cookie.
+  # config.extend_remember_period = false
+
+  # Options to be passed to the created cookie. For instance, you can set
+  # secure: true in order to force SSL only cookies.
+  # config.rememberable_options = {}
+
+end
+```
 
 ### validatable
+> Validatable creates all needed validations for a user email and password.
+  It's optional, given you may want to create the validations by yourself.
+  Automatically validate if the email is present, unique and its format is
+  valid. Also tests presence of password, confirmation and length.
+
+Adds configurable restrictions to the user's email and password.
+This is where you want to go if you're changing your password length/strength
+requirements.
+
+```rb
+Devise.setup do |config|
+  # ...
+  # ==> Configuration for :validatable
+  # Range for password length.
+  config.password_length = 6..128
+
+  # Email regex used to validate email formats. It simply asserts that
+  # one (and only one) @ exists in the given string. This is mainly
+  # to give user feedback and not to assert the e-mail validity.
+  config.email_regexp = /\A[^@\s]+@[^@\s]+\z/
+end
+```
+
+## What are the other Devise Modules?
+Everything covered above is what was enabled on the User model by default when 
+running the generation, but devise comes with extras! Lets look at them
+from a high level, disregarding the configurables for now.
+
+### omniauthable
+Adds [OmniAuth](https://github.com/omniauth/omniauth) support. This allows users
+to login using their identy with "everything from Facebook to LDAP".
+
+### confirmable
+> Confirmable is responsible to verify if an account is already confirmed to
+  sign in, and to send emails with confirmation instructions.
+  Confirmation instructions are sent to the user email after creating a
+  record and when manually requested by a new confirmation instruction request.
+
+This makes the user confirm their email on registration. This ensures users don't
+sign up with a typo/invalid email address. The user's account isn't activated
+until confirmed (but this is configurable).
+
+### trackable
+> Track information about your user sign in.
+
+Tracks each user's sign in count, time of current sign in and last sign out, and
+current/last IP address.
+
+### timeoutable
+> Timeoutable takes care of verifying whether a user session has already
+  expired or not. When a session expires after the configured time, the user
+  will be asked for credentials again, it means, they will be redirected
+  to the sign in page.
+
+Sounds similar to rememberable? Rememberable operates on a **cookie based** token
+system to authenticate the user's actions. The clock does not reset when the user
+performs an action, rather they are **asked to relogin** on a periodic basis.
+
+Timeoutable is a **session based** authentication check. This module adds tracking of
+`last_request_at` in the session for the user, should the user not perform
+some action after N amount of time their session is terminated.
+
+This is useful for more sensitive-data focused applications. Take a banking app
+for example, you wouldn't want your bank to keep you logged in for a few minutes
+at a time, rather you would want your bank to forcibly log you out after a few 
+minutes of inactivity. 
 
 
+### lockable
+> Handles blocking a user access after a certain number of attempts.
+  Lockable accepts two different strategies to unlock a user after it's
+  blocked: email and time. The former will send an email to the user when
+  the lock happens, containing a link to unlock its account. The second
+  will unlock the user automatically after some configured time (ie 2.hours).
+  It's also possible to set up lockable to use both email and time strategies.
+
+Break out those password managers, or prepare to reset your password or wait
+when you forget your password and inevitably try dozens of different combinations
+or the same password over and over and over again!
+
+This module adds restrictions to failed password attempts.
 
 
-
+## Where to go from Here?
+Everything covered up to this point is devise-provided functionality through the gem.
+There's an entire ecosystem of addon gems out there, go 
+[check them out](https://rubygems.org/search?utf8=%E2%9C%93&query=devise) and see what
+cool features are out there.
