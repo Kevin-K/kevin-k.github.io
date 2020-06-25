@@ -484,6 +484,10 @@ Everything covered above is what was enabled on the User model by default when
 running the generation, but devise comes with extras! Lets look at them
 from a high level, disregarding the configurables for now.
 
+Take note: when adding a devise module migrations are necessary in some instances.
+Take a look at the Devise wiki for needed steps, for example here is the needed 
+migration for [confirmable](https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users).
+
 ### omniauthable
 Adds [OmniAuth](https://github.com/omniauth/omniauth) support. This allows users
 to login using their identy with "everything from Facebook to LDAP".
