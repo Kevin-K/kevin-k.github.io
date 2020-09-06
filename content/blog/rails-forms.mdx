@@ -1,0 +1,86 @@
+---
+date: 2020-09-05
+title: Rails Forms
+description: 
+---
+
+An ongoing painpoint of current development for me is form behavior in an app that leverages Rails and React.
+Rails has great [helpers](https://guides.rubyonrails.org/form_helpers.html) for putting forms in views, but a shortcoming
+of moving more code over to react was poorly handled forms. In the codebase in question, I've sprinkled in react using
+[react-rails](https://github.com/reactjs/react-rails) and one inconsistency I've had to battle is behavior of form elements
+added with rails helpers versus my react components.
+
+In an effort to better understand the limitations of my existing react + rails solution, lets dive into what the rails form
+helpers offer. This investigation will be against rails 6.
+
+## Api Docs
+These will be used for reference:
+* [ActionView::Helpers::FormHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormHelper.html)
+* [ActionView::Helpers::FormOptionsHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormOptionsHelper.html)
+
+## Reviewing Controllers and Forms
+When working with controllers in rails, a **route** is the tethering of a URI pattern (ex: /users/:id), an HTTP action (ex: PUT) and
+optionally a set of params (`params` hash) to a given **controller method** (ex: UsersController#update). HTML forms are a way
+to coordinate a HTTP request based on user input on a page.
+
+For example, a User is an entity that has 2 attributes `name` and `id`, and that name can be updated by **POSTing** to the 
+path `/users/:id`. An HTML form for editing said user's name would look as follows:
+
+```html
+<form action="/users/1" method="post">
+    <label for="user_name"> Name </label>
+    <input id="user_name" name="user[name]" value="John"></input>
+    <input type="submit" value="Save">
+</form>
+```
+
+By clicking the "Save" button, an `HTTP POST` is sent to `/users/1` (against the origin of your application) with form data of:
+`user[name]: John`. 
+
+By default forms are of content-type: application/x-www-form-urlencoded, which means the payload is sent
+in a KEY=VALUE& format like how an HTTP GET request formats its query parameters (non alphanumerics are encoded). This
+content-type is different than that which is normaly used when submitting an AJAX request(or any XMLHttpRequest). 
+
+AJAX requests require formatting separate from the HTML elements to structure the body of the request. Often web applications
+(Javascript based ones specifically) will use content-type: application/json to submit payloads in JSON format.
+
+
+### From x-www-form-urlencoded to params
+Thankfully, this step is abstracted away from the business logic of a rails controller method. Rails leverages [rack](https://github.com/rack/rack)
+for its HTTP server, which handles taking the url-encoded form data, and normalizing it into the `params` the controller acts upon.
+
+Here's the general flow from browser click to controller processing:
+
+```
+<Submitting HTTP POST "/users/1">               
+user[name]=John
+   |
+   |
+   |
+   V
+<HTTP POST Body encoded>
+user%5Bname%5D=John   
+   |
+   | (across the internet we go)
+   |
+   V
+<Rack middlware parses the request>
+{ user: { name: "John" } }
+   |
+   | (controller method invoked)
+   |
+   V
+<UsersController#update has its params>
+params[:user][:name] == "John"
+```
+
+With that overview of how HTML forms function, let's look at what rails simplifies with its HTML generation.
+
+
+## form_for
+
+## form_with
+
+## fields_for
+
+## fields
