@@ -1,7 +1,7 @@
 ---
 date: 2020-09-05
 title: Rails Forms
-description: 
+description:
 ---
 
 An ongoing painpoint of current development for me is form behavior in an app that leverages Rails and React.
@@ -13,18 +13,19 @@ added with rails helpers versus my react components.
 In an effort to better understand the limitations of my existing react + rails solution, lets dive into what the rails form
 helpers offer. This investigation will be against rails 6.
 
-## Api Docs
-These will be used for reference:
-* [ActionView::Helpers::FormHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormHelper.html)
-* [ActionView::Helpers::FormOptionsHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormOptionsHelper.html)
+These API documents were useful in my studying of rails forms:
 
-## Reviewing Controllers and Forms
+- [ActionView::Helpers::FormHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormHelper.html)
+- [ActionView::Helpers::FormOptionsHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormOptionsHelper.html)
+
+# Reviewing Controllers and Forms
+
 When working with controllers in rails, a **route** is the tethering of a URI pattern (ex: /users/:id), an HTTP action (ex: PUT) and
-optionally a set of params (`params` hash) to a given **controller method** (ex: UsersController#update). HTML forms are a way
+optionally a set of params (params hash) to a given **controller method** (ex: UsersController#update). HTML forms are a way
 to coordinate a HTTP request based on user input on a page.
 
-For example, a User is an entity that has 2 attributes `name` and `id`, and that name can be updated by **POSTing** to the 
-path `/users/:id`. An HTML form for editing said user's name would look as follows:
+For example, a User is an entity that has 2 attributes **name** and **id**, and that name can be updated by **POSTing** to the
+path **"/users/:id"**. An HTML form for editing said user's name would look as follows:
 
 ```html
 <form action="/users/1" method="post">
@@ -34,32 +35,32 @@ path `/users/:id`. An HTML form for editing said user's name would look as follo
 </form>
 ```
 
-By clicking the "Save" button, an `HTTP POST` is sent to `/users/1` (against the origin of your application) with form data of:
-`user[name]: John`. 
+By clicking the "Save" button, an **HTTP POST** is sent to **"/users/1"** (against the origin of your application) with form data of:
+`user[name]: John`.
 
 By default forms are of content-type: application/x-www-form-urlencoded, which means the payload is sent
 in a KEY=VALUE& format like how an HTTP GET request formats its query parameters (non alphanumerics are encoded). This
-content-type is different than that which is normaly used when submitting an AJAX request(or any XMLHttpRequest). 
+content-type is different than that which is normaly used when submitting an AJAX request(or any XMLHttpRequest).
 
 AJAX requests require formatting separate from the HTML elements to structure the body of the request. Often web applications
 (Javascript based ones specifically) will use content-type: application/json to submit payloads in JSON format.
 
+## From x-www-form-urlencoded to params
 
-### From x-www-form-urlencoded to params
 Thankfully, this step is abstracted away from the business logic of a rails controller method. Rails leverages [rack](https://github.com/rack/rack)
-for its HTTP server, which handles taking the url-encoded form data, and normalizing it into the `params` the controller acts upon.
+for its HTTP server, which handles taking the url-encoded form data, and normalizing it into the **params** the controller acts upon.
 
 Here's the general flow from browser click to controller processing:
 
 ```
-<Submitting HTTP POST "/users/1">               
+<Submitting HTTP POST "/users/1">
 user[name]=John
    |
    |
    |
    V
 <HTTP POST Body encoded>
-user%5Bname%5D=John   
+user%5Bname%5D=John
    |
    | (across the internet we go)
    |
@@ -74,13 +75,200 @@ user%5Bname%5D=John
 params[:user][:name] == "John"
 ```
 
-With that overview of how HTML forms function, let's look at what rails simplifies with its HTML generation.
+# The form_with method
 
+The most basic building block, without giving this method arguments an "empty" form
+is created that will POST to "/".
 
-## form_for
+##### erb view snippet
 
-## form_with
+```erb
+<%= form_with do %>
+<% end %>
+```
 
-## fields_for
+##### rendered HTML
 
-## fields
+```html
+<form accept-charset="UTF-8" action="/" data-remote="true" method="post">
+  <input
+    name="authenticity_token"
+    type="hidden"
+    value="J7CBxfHalt49OSHp27hblqK20c9PgwJ108nDHX/8Cts="
+  />
+</form>
+```
+
+The form isn't truely empty, a hidden **authenticity_token** is added by rails to protect against
+cross-site request forgery.
+
+The [form_with](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormHelper.html#method-i-form_with) method
+accepts the following key-word arguments:
+
+- model
+- scope
+- url
+- format
+- (and other options and block scope)
+
+## Form for a new user
+
+When passing a model to form_with, the form gains a few extra "senses".
+If the controller generates a new user instance variable (unpersisted):
+
+##### rails controller
+
+```rb
+class UsersController < ApplicationController
+   def new
+      @user = User.new
+   end
+end
+```
+
+And that user is set as the model of the form in the view:
+
+##### erb view snippet
+
+```erb
+<%= form_with(model: @user) do %>
+<% end %>
+```
+
+The HTML results as a form for a new user submission:
+
+##### rendered HTML
+
+```html
+<form action="/users" accept-charset="UTF-8" data-remote="true" method="post">
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="wCiQX9xpPiczNRM5bZGSQPt4IhMeKP8asaYzIK0EDx8da776gF0/5mW++xBoN211vCmNHksTHoiwyG+BIvi+pA=="
+  />
+</form>
+```
+
+## Form for an existing user
+
+Now consider the same view code, but for an existing user. Take a user edit page for example:
+
+##### rails controller
+
+```rb
+class UsersController < ApplicationController
+   def edit
+      @user = User.find(params[:id])
+   end
+end
+```
+
+The view leverages the same form_with call:
+
+##### erb view snippet
+
+```erb
+<%= form_with(model: @user) do %>
+<% end %>
+```
+
+The HTML renders as follows:
+
+##### rendered HTML
+
+```html
+<form action="/users/1" accept-charset="UTF-8" data-remote="true" method="post">
+  <input type="hidden" name="_method" value="patch" />
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="l/mEtfp8e5bzKxb4851AVLrPt0kTTGPDm4lKgxxo2zxKuqoQpkh6V6Wg/tH2O79h/Z4YREZ3glGa5xYik5Rqhw=="
+  />
+</form>
+```
+
+Comparing the **action** of this HTML output to that of the new user, the difference is
+the path is set to that of the individual user rather than the base "/users" route.
+
+The **method** is POST, even though running "rails routes" shows users#update uses the HTTP PATCH.
+This is because HTML [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form) elements
+only accept "get", "post", or "dialog" as the method. To combat this, rails inserts a hidden **\_method**
+input of value "patch" to tell the backend on submission "I know I said I'm POSTING you data, but
+really this should be handled as a PATCH".
+
+## The power of the model
+
+If a model is provided to form_with, the scope and url attributes are inferred (unless set specifically).
+The url attribute has been explored above, the scope will be more transparent as elements of the form
+are introduced. For precursory knowledge, scope specifies the prefix on form attributes, ex:
+
+> A scope of "user" + input for a user's attribute "name" = `<input name="user[name]"/>`
+
+The last argument to discuss is **format**, when a url is given to form_with this ignored.
+When a model is given, the url will postfix the given format. Useful for crafting format
+specific submissions. For example, if format is added to the above user submit form:
+
+##### erb view snippet
+
+```erb
+<%= form_with(model: @user, format: :json) do %>
+<% end %>
+```
+
+The action for the form will be a **.json** URL:
+
+##### rendered HTML
+
+```html
+<form
+  action="/users.json"
+  accept-charset="UTF-8"
+  data-remote="true"
+  method="post"
+>
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="l/mEtfp8e5bzKxb4851AVLrPt0kTTGPDm4lKgxxo2zxKuqoQpkh6V6Wg/tH2O79h/Z4YREZ3glGa5xYik5Rqhw=="
+  />
+</form>
+```
+
+## data-remote="true"
+
+All of the rendered forms thus far have had `data-remote="true"` as an attribute. As of rais 5.1.2,
+all forms (built by helpers) by default submit through AJAX rather than a full page load submission.
+Since [turbolinks](https://github.com/turbolinks/turbolinks) (included with rails) helps mitigate the
+amount of reloading, submissions through AJAX can give a more fluid experience.
+
+If a forced full page load on submission is desired, use the **local** argument. This can be set globally
+with the following rails config:
+`Rails.application.config.action_view.form_with_generates_remote_forms`.
+
+##### erb view snippet
+
+```erb
+<%= form_with(model: @user, local: true) do %>
+<% end %>
+```
+
+##### rendered HTML
+
+```html
+<form action="/users.json" accept-charset="UTF-8" method="post">
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="l/mEtfp8e5bzKxb4851AVLrPt0kTTGPDm4lKgxxo2zxKuqoQpkh6V6Wg/tH2O79h/Z4YREZ3glGa5xYik5Rqhw=="
+  />
+</form>
+```
+
+# The form_for and form_tag methods
+
+These methods predate **form_with**, and have been consolodated into what is suggested to use in rails 5.1+ through **form_with**.
+This [stackoverflow answer](https://stackoverflow.com/a/58112003) does a good job of explaining the difference of the existing
+behavior and what **form_with** changed. The **form_for** method was previously used for forms representing a record,
+where **form_tag** was for non-record related forms (ex: search forms).
+The biggest change to note is **form_for** would autogenerate css class names and id attributes for the form, whereas **form_with**
+leaves that to the developer to do if needed.

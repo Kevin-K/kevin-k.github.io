@@ -5,6 +5,7 @@ import { MDXProvider } from '@mdx-js/react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { graphql } from 'gatsby';
 import Typography from '@material-ui/core/Typography';
+import MdxComponents from '../blog/mdx-components';
 
 export default function BlogLayout({ pageContext, data: { mdx } }) {
   const { title, date } = mdx.frontmatter;
@@ -22,7 +23,7 @@ export default function BlogLayout({ pageContext, data: { mdx } }) {
       </header>
       <hr />
 
-      <MDXProvider>
+      <MDXProvider components={MdxComponents}>
         <MDXRenderer>{mdx.body}</MDXRenderer>
       </MDXProvider>
     </article>
