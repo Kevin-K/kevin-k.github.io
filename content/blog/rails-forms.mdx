@@ -6,17 +6,17 @@ description:
 
 An ongoing painpoint of current development for me is form behavior in an app that leverages Rails and React.
 Rails has great [helpers](https://guides.rubyonrails.org/form_helpers.html) for putting forms in views, but a shortcoming
-of moving more code over to react was poorly handled forms. In the codebase in question, I've sprinkled in react using
-[react-rails](https://github.com/reactjs/react-rails) and one inconsistency I've had to battle is behavior of form elements
-added with rails helpers versus my react components.
+of moving more code over to react was poorly handled forms, visual feedback on validation errors in particular. 
+In the codebase in question, I've sprinkled in react using [react-rails](https://github.com/reactjs/react-rails) and 
+one inconsistency I've had to battle is behavior of form elements added with rails helpers versus my react components.
 
 In an effort to better understand the limitations of my existing react + rails solution, lets dive into what the rails form
 helpers offer. This investigation will be against rails 6.
 
 These API documents were useful in my studying of rails forms:
 
-- [ActionView::Helpers::FormHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormHelper.html)
-- [ActionView::Helpers::FormOptionsHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormOptionsHelper.html)
+- [ActionView::Helpers::FormHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormHelper.html), rails form and input helpers.
+- [ActionView::Helpers::FormOptionsHelper](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormOptionsHelper.html), rails select input helpers.
 
 # Reviewing Controllers and Forms
 
@@ -266,9 +266,242 @@ with the following rails config:
 
 # The form_for and form_tag methods
 
-These methods predate **form_with**, and have been consolodated into what is suggested to use in rails 5.1+ through **form_with**.
+These methods predate **form_with**, and have been consolidated into what is suggested to use in rails 5.1+ through **form_with**.
 This [stackoverflow answer](https://stackoverflow.com/a/58112003) does a good job of explaining the difference of the existing
 behavior and what **form_with** changed. The **form_for** method was previously used for forms representing a record,
 where **form_tag** was for non-record related forms (ex: search forms).
 The biggest change to note is **form_for** would autogenerate css class names and id attributes for the form, whereas **form_with**
 leaves that to the developer to do if needed.
+
+
+# Form inputs
+The **form_with** helper has shown how to render a form, but what about the inputs? Thankfully rails provides helpers for those as well.
+The list of form field input helpers is lengthy, it is best to refer to the FormHelper [api docs](https://api.rubyonrails.org/v6.0.3.2/classes/ActionView/Helpers/FormHelper.html)
+and look for methods ending in `_field` or `_area` (or look at **check_box** it doesn't fit the naming pattern).
+
+These input helpers typically take the first 2 parameters as the object (ex: 'user') and attribute (ex: 'name'). If used within a **form_with** block and called
+through the form, the object is inferred from the form model (or scope).
+
+# Form validation
+Form validation has been the biggest visible shortcoming of my rails + react integration. When using form field helpers
+in rails, invalid form fields will be marked with the `field_with_errors` css class when the server responds with validation 
+errors. Additionally, the form "state" is retained from the submission attempt. For example, if a user's name must be unique,
+and I try and create a new record using a duplicate name, the **name** input will be marked with an error, and the value that I
+had inputted (the duplicate) will still be the value of the input. When preferring use of form field helpers, the behavior of 
+form validation becomes consistent, and styling updates can be made on a global scale.
+
+# Throwing react in the mix
+In my react form components, I am passing the model through JSON serialization (jBuilder) before giving this JSON to the react component
+as react props. Two things are lost here, the marking of the input as "invalid" when validation errors occur, and the previously attempted
+input value. My implementation has shortcomings, rather than recreate it here I'll explore replacing a **text_field** form helper 
+in rails with one built in react. Moving this to react does not gain any functionality for a **text_field**, but this exploration
+should help develop a reusable pattern for more complex form inputs.
+
+I'll be using a scratch rails 6 application, but adding react-rails. The following shall be added to the gemfile:
+
+##### gemfile
+```rb
+gem 'react-rails'
+```
+
+Then the following install steps are ran:
+
+```bash
+$ bundle install
+$ rails webpacker:install
+$ rails webpacker:install:react
+$ rails generate react:install
+```
+
+I'll generate a react TextField component, with a name and value property (both strings):
+
+```bash
+rails g react:component TextField name:string value:string
+```
+
+And after structing the react component to be an input I have the following:
+
+
+##### app/javascript/components/TextField.js
+
+```js
+import React from "react";
+import PropTypes from "prop-types";
+
+const TextField = ({ name, value }) => (<input name={name} defaultValue={value} />);
+
+TextField.defaultProps = {
+  name: '',
+  value: ''
+};
+
+TextField.propTypes = {
+  name: PropTypes.string,
+  value: PropTypes.string
+};
+
+export default TextField;
+```
+
+And a rails form for users:
+
+##### app/views/users/_form.html.erb
+
+```erb
+<%= form_with(model: user, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= react_component("TextField", { name: "user[name]", value: user.name }) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+```
+
+Replecating a test of user creation with a taken name, the name input no longer receives css styling to
+indicate the error, but the content is retained! This is a great discovery for myself, I drafted this up
+without referring to my existing implementation, and can assume something in my property passing for form
+values does not function properly. I'll dig into that later.
+
+The lack of error styling on the input is due to the react component not having knowledge that it's input 
+should be rendered with an "error" state. To minimize the functionality duplication, I'll look at how the 
+form helper **text_field** knows to mark the input as an error, as well as what css class names are applied.
+From the investigation above into rails validations, I anticipate to find the logic applying the css class
+`field_with_errors` to the input.
+
+
+##### lib/action_view/helpers/form_helper.rb
+```rb
+def text_field(object_name, method, options = {})
+  Tags::TextField.new(object_name, method, self, options).render
+end
+```
+
+The form helper calls out to the Tags::TextField for rendering:
+
+##### lib/action_view/helpers/tags/text_field.rb
+
+```rb
+def render
+  options = @options.stringify_keys
+  options["size"] = options["maxlength"] unless options.key?("size")
+  options["type"] ||= field_type
+  options["value"] = options.fetch("value") { value_before_type_cast(object) } unless field_type == "file"
+  options["value"] &&= ERB::Util.html_escape(options["value"])
+  add_default_name_and_id(options)
+  tag("input", options)
+end
+```
+
+Nothing stands out at the **text_field** or **Tags::TextField#render** level. Knowing this is a pattern applied
+across many different input handlers in rails forms, its time to look up rather than further down. Rather than 
+poking around the Form and FormBuilder logic directly, I opted to refer back to the rails documentation, and 
+found **what** is set, but not **how**. This [section](https://guides.rubyonrails.org/active_record_validations.html#displaying-validation-errors-in-views)
+of the rails documentation on validation shows that form helpers will wrap inputs with a **div** with css class `field_with_errors`,
+that solidifies my search for what to put on my react inputs for consistency, but not how.
+
+After grepping through the rails source, I found the proc that applies this, [field_error_proc](https://github.com/rails/rails/blob/90216abe121aa9da12e9338722f8f25d252dcf75/actionview/lib/action_view/base.rb#L145),
+but still need to go higher to see how that proc gets called. Nested in the **ActionView::Helpers::ActiveModelInstanceTag** helper is
+[error_wrapping](https://github.com/rails/rails/blob/98a57aa5f610bc66af31af409c72173cdeeb3c9e/actionview/lib/action_view/helpers/active_model_helper.rb#L28).
+The logic in question is below:
+
+##### lib/action_view/helpers/active_model_helper.rb
+
+```rb
+  def error_wrapping(html_tag)
+    if object_has_errors?
+      Base.field_error_proc.call(html_tag, self)
+    else
+      html_tag
+    end
+  end
+
+  def object_has_errors?
+    object.respond_to?(:errors) && object.errors.respond_to?(:[]) && error_message.present?
+  end
+
+  def error_message
+    object.errors[@method_name]
+  end
+```
+
+Still not clear how this is called, I threw a `binding.pry` in the **error_wrapping** method, and saw that it's called within the scope of an individual form element with 
+respect to the object (user record) as a whole. Below is a stacktrace for the label form element.
+
+##### stacktrace (ommited local paths)
+```json
+[
+  ".rvm/gems/ruby-2.7.0/gems/actionview-6.0.3.2/lib/action_view/helpers/active_model_helper.rb:30:in `error_wrapping'",
+ ".rvm/gems/ruby-2.7.0/gems/actionview-6.0.3.2/lib/action_view/helpers/active_model_helper.rb:21:in `content_tag'",
+ ".rvm/gems/ruby-2.7.0/gems/actionview-6.0.3.2/lib/action_view/helpers/form_tag_helper.rb:223:in `label_tag'",
+ ".rvm/gems/ruby-2.7.0/gems/actionview-6.0.3.2/lib/action_view/helpers/tags/label.rb:70:in `render'",
+ ".rvm/gems/ruby-2.7.0/gems/actionview-6.0.3.2/lib/action_view/helpers/form_helper.rb:1118:in `label'",
+ ".rvm/gems/ruby-2.7.0/gems/actionview-6.0.3.2/lib/action_view/helpers/form_helper.rb:2253:in `label'",
+ "app/views/users/_form.html.erb:3:in `block in _app_views_users__form_html_erb__2383728143785216301_21760'",
+ ".rvm/gems/ruby-2.7.0/gems/actionview-6.0.3.2/lib/action_view/helpers/capture_helper.rb:45:in `block in capture'",
+]
+```
+
+My suspicion on looking up rather than down was wrong, the error is detected by checking the form's model (user) for errors captured under the **method_name**,
+which is the input's name (name in this scenario). Therefore, informing the react component of error can be done by checking `user.errors[:name]`. I'll take a naive approach
+to passing errors down, theres a pattern to be found but I don't see it yet. Below is the updated react component:
+
+
+##### app/javascript/components/TextField.js
+
+```js
+import React from "react";
+import PropTypes from "prop-types";
+
+const errorClassName = (error = "") => error.length ? "field_with_errors" : "";
+
+const TextField = ({ name, value, error }) => (
+  <div className={errorClassName(error)}>
+    <input name={name} defaultValue={value} />
+  </div>
+);
+
+TextField.defaultProps = {
+  name: '',
+  value: ''
+};
+
+TextField.propTypes = {
+  name: PropTypes.string,
+  value: PropTypes.string,
+  error: PropTypes.string
+};
+
+export default TextField;
+```
+
+
+
+And the rails form forwards the error:
+
+##### app/views/users/_form.html.erb
+
+```erb
+<%= form_with(model: user, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= react_component("TextField", { name: "user[name]", value: user.name, error: user.errors[:name] }) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+```
