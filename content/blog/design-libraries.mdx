@@ -1,0 +1,96 @@
+---
+path: /blog/design-libraries
+date: 2020-11-15T12:20:00.000Z
+title: Use a Design Library
+description: Setting a legacy application up for future success
+---
+
+## When design meets engineering 
+
+I view **core design elements** not always as the smallest reusable essence (think atoms). To me core design elements
+are ideally  small in purpose, and are building blocks for more complex elements in an end product (think molecules).
+
+Code is a living thing just like designs, and as it matures **composite design elements** emerge that, while reused less 
+frequently, propel development forward when a new feature can be built leveraging larger aspects of existing code.
+
+Elements of a design are a blend of style and functionality. For a low-resolution idea on what those element "sizes" are to me:
+* **core elements** - a table, a list, a button, a form, a modal
+* **composite elements** - an infinite loading table, a CRUD table, a selection modal comprising of a list of choices
+
+Each product is different, and there are plenty of pre-built design libraries that propel greenfield efforts forward.
+Take [material design's react library](https://material-ui.com/) for example, an excellent collection of core design elements
+ready to go.
+
+## The field isn't always greener
+I've provoked this thought on what to consider a core design element not to bait and switch into "use what's out there!",
+rather to take on the challenge of legacy code.
+
+Envision starting a new job, being brought in to modernize a legacy application, and you pull down the existing codebase.
+At the end of a pot of coffee, you find yourself lost in implementation details. There's conflicting implementations of inputs in style and code, 
+multiple components serve the same purpose less "a small detail", styling definitions are spread wide and overlap.
+
+Naive thoughts of "rewrite this and that!" run through your mind, and that's normal. You've picked up a project that has history, you want to get
+functionality built to meet deadlines, and you want to do your best to leave the code better than you found it. Time is valuable, and rewriting
+can be expensive when new functionality also needs to be delivered.
+
+Hit rewind on those thoughts, search and replace "rewrite" with "consolidate". Does that change any of the cost? Every scenario is different,
+there  is no silver bullet, but I've found more often than not that consolidating duplications in design has set designers and developers up for 
+success. 
+
+## An exercise: tables
+Look at tables in your product. Have many of them? Great. Do they serve different functional purposes? Ok. Are there subtle differences in
+the aspects which interact with the tables (buttons, scrollability, ect)? Perfect. If this doesn't apply to your product, perhaps this exercise
+will open developer and designer eyes to unknown consistency issues.
+
+Pick an implementation of how tabular data is represented in your product from a design mindset of which behaviorally is leveraged across
+your system. Think about filterability, pagination, how rows of data are represented, and what types of data columns represent. Is there 
+an implementation that is common to all usage? If so you've found a core table element for your product.
+
+It's likely that search fails, each instance of a table has something different and there isn't one that all of which could grow from! Start redacting
+from your criteria, take out the notion of what the content is (engineering hopefully has), then pagination, ect. As an extreme, you may find that
+no basis can be made from a functional standpoint. If thats the case your basis for a component is the visual notion of a table. Maybe this sparks
+thoughts on "well we should enhance all tables for pagination, then thats our basis". Good, hold on to that thought, document it, and come back to
+it once you have your core element because you still don't have it yet. If you have multiple visual representations of tables, see if
+consolidating to a single style is possible, if not capture your variants.
+
+Design takes their findings to engineering, the core element is "just a table" design exclaims. Our system has a "default" table look and a "small" variant.
+Engineering does some code searching, and finds they do have implementations of a "just table", one in plain html with the table tag,
+another leveraging div's with bootstrap columns, another with CSS flexbox. Peeling back the implementations, they have subtle styling differences. A few
+pixel difference in margins, how text is handled on various browser sizes, and how to apply variants. One engineer rushes to point out, how engineers
+instantiate these tables is different too! Look at how we adapt our API responses to fill those tables.
+
+Design has proposed what the base "just a table" should look like, and assures engineering if we represent tables this way, we can enhance our designs
+moving forward. Engineering now faces consolidating existing implementations down to one base. That base realistically doesn't exist since there were 
+subtle differences in mockups to engineering implementation. Engineering pushes forward updating one of the table implementations, the one best fit to 
+build off of moving forward, to make the design mock. 
+
+During this push engineering thinks critically to make that table a building block. Knowing that design wants to make pagination a widely used (but not everywhere)
+aspect of the product, engineers huddle around how to best encapsulate the design element in code form. Be it through composition or inheritance driven engineering,
+the engineers have agreed on an interface into the table which promotes expanded use moving forward without overloading the base table.
+
+Engineering updates implementations to leverage that base table, adapting into existing extra functionality as needed, and updates the tests.
+Ideally there's a net loss on the lines of code, but importantly there's a net gain on confidence in using tables in the product. Testing becomes more confident,
+and adding additional tables to the system now has an agreed upon approach. Design and engineering alike can move quickly through the agreed upon notion of a 
+table.
+
+The **core element: Table** is indoctrinated into the products design library. Tooling may be leveraged to retain that living **contract between design and engineering**,
+a common example is the usage of [storybook](https://storybook.js.org/).
+
+## 1 week later
+
+What happens when new feature requests flow in, "give that table buttons, filterability, pivotability, and a fresh paint job!"? Each team operates differently,
+what process they use likely dictates how/when those discussions occur. My mindset is think critically, be adaptable, but also be true to 
+your product's core design. 
+
+Adding buttons into the table may seem like a fast win, and may ship that feature 
+early, but what does that do for functionality added 1, 6, 12 months down the line? There are always judgement calls to be made, there is no 
+silver bullet. Think critically to set the future you up for success. Adding those buttons to the table may work fine, but not all tables need buttons
+in your system, would a composite element encapsulating  tabular data and buttons work as well? Perhaps think of making a **composite element: ActionableTable**.
+
+Products are not built and maintained in sprints (the running kind not the agile kind), but they are marathons. Thinking critically as 
+the product grows and adapting code may slow you down at times, but don't view that as time lost, view it as time invested for future momentum.
+
+There are no silver bullets, time-critical updates will be had and design and code will drift from being
+"true to its core". Be critical and make changes where it makes sense, if consolidating two conflicting elements seems risky and too costly,
+document it and revisit it when the cost reduces and the runway is longer. At the end of the day, do your best to leave your product in a 
+better state than how you found it.
