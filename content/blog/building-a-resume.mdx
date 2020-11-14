@@ -2,29 +2,40 @@
 path: /blog/building-a-resume
 date: 2019-12-10T03:54:55.905Z
 title: Building a Resume with React
-description: My journey through component design itteration
+description: My journey through component design iteration
 ---
-import Heading from "../../src/components/resume/heading"
+import { Heading } from "resume-react";
 import old_resume_snippet from '../../src/assets/old_resume_snippet.jpg';
 import old_resume_snippet_monolithic from '../../src/assets/old_resume_snippet_monolithic.jpg';
 
 ## How my [resume](/resume) was created 
 
-I've used a great tool for the last few years to manage my resume,
-[JSON Resume](https://jsonresume.org/). If you are looking for a 
-tool to quickly structure a resume it's worth a look. Given some JSON and 
+I've used the [JSON Resume](https://jsonresume.org/) tool for the last handful years to manage my resume,
+its a document generator, running on the notion of a common JSON [schema](https://jsonresume.org/schema/) for resume content. 
+If you are looking for a tool to quickly structure a resume it's worth a look. Given some JSON and 
 a selected theme, you can quickly export a resume to PDF or HTML.
 
 I was in the process of building this website to host my resume and hobby 
-projects and decided to take my resume and recreated it in React. The reason? 
-This website is built with [Gatsby](https://www.gatsbyjs.org/), which gives you 
-the ability to pulling static content into a page through GraphQL.
+projects and decided to take my resume and recreated it in React. I'd like to say
+there was a flashy reason to do this. Pragmaticly, the resume has nothing to gain in performance
+or content editability (since its just updating a JSON file). Hobby projects are a great chance for
+developers to through pragmatism aside and try new things "just because". 
+
+I've had a laundry list of things in the javascript ecosystem to revisit, two of which were:
+ 1. publishing NPM packages
+ 2. leveraging component library tooling
+
+With that, [resume-react](https://www.npmjs.com/package/resume-react) was created, and [storybook](https://kevin-k.github.io/resume-react/?path=/docs/full-resume-example--readme-example)
+powered the living docs. Onward to a journey of how the componentry of react-resume came to be.
 
 ## Desired Output
 
-1. The resume renders in a "print" format on desktop.
+1. The resume renders in a "print-like" format on desktop.
 2. The resume renders in a readable format on mobile.
 3. The resume can be printed from the browser (and saved to PDF).
+
+This is a two part blog post. Here we will explore migrating an existing HTML resume over
+to react. Part two explores print formatting considerations.
 
 ## The Approach
 I had at one point in time forked the [onepage theme](https://github.com/Kevin-K/jsonresume-theme-onepage)
@@ -42,7 +53,7 @@ from the top-down, so to begin I envisioned creating a monolithic resume compone
 
 ---
 
-### Itteration 1: 1 Component to Rule them all
+### Iteration 1: 1 Component to Rule them all
 
 <figure>
 <img src={old_resume_snippet_monolithic} style={{display: 'block', width: 400, margin: 'auto'}}/>
@@ -57,15 +68,14 @@ from the top-down, so to begin I envisioned creating a monolithic resume compone
 - Low reusability
 - High code complexity
 
-The pros here are file simplicity, I could toss everything in one file and call it a day,
+The pros here are file simplicity, I could copy the existing HTML into 1 react component and call it a day,
 should I need to revisit the resume in the future all I'll need to do is open my `resume.js`
 file and modify my component.
 
 The number of properties applied onto the resume component will be high. That is
 not of great concern to me, as I view this component as serving a single purpose.
 
-
-```js
+```jsx
 <Resume
     name="Kevin Kelly"
     title="Senior Software Engineer"
@@ -96,17 +106,24 @@ not of great concern to me, as I view this component as serving a single purpose
 This lacks code reusability. If I want to create a modified resume layout my options
 are to either:
 
-1. Copy and paste the Resume component code. **Bad: Duplicated logic**
+1. Copy and paste the Resume component code. **Bad: duplicated logic**
 2. Add the modified layout to the Resume component and add a prop to select the
-modified layout. **Bad: God component**
+modified layout. **Bad: breaks [single responsiblity principle](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)**
 
 It's not evident yet, but there's an abundance of functionality within this
-one component. At this point in the design itteration I give my code the
+one component. Having a top-level component, Resume, sounds beneficial!
+It's the interfacing layer of the JSONResume data into the presentation layer. If my goal was
+to migrate my resume into a React component, I could call it a day. With reacts [composition 
+ideology](https://reactjs.org/docs/thinking-in-react.html), I have encapsulated my resume behind
+a component barrier. Wherever it is rendered, other components rendered shouldn't care about it!
+
+
+Rather than just pick apart what lives under the shell of Resume, I'll give my code the
 "test smell-test"
 
 ---
 
-### Itteration 2: Now with Smell-O-Vision
+### Iteration 2: Now with Smell-O-Vision
 
 #### Test Smell-Test
 *How painful is testing this going to be?*
@@ -154,7 +171,7 @@ each content section.
 /// put mockup here for with content component.
 
 
-#### Content commenalities
+#### Content commonalities
 I could go further to say within the content there are additional coorelations,
 like how the "EXPERIENCE" section and "VOLUNTEER" section have matching
 test criterias and the style of each content section is identical.
@@ -177,14 +194,14 @@ a extraction isn't crystal clear I back off. It looks like "EDUCATION"
 and "SKILLS" for now will be their own components.
 
 Rome wasn't built in a day, and the cleanest code wasn't built in one
-itteration. Extracting code often poses new challenges, so I 
+Iteration. Extracting code often poses new challenges, so I 
 err on the side of caution. Extract too much? You're now dealing
 with component hell. Extract too little? You're not getting
 "clean cuts" of your components for reusability.
 
 ---
 
-### Itteration 3: Sweeping under the Rug
+### Iteration 3: Sweeping under the Rug
 
 At this point I'm happy with the reduction in code duplication, by
 structuring each section of my resume into `Content` blocks containing 
@@ -204,6 +221,7 @@ silly to import from my resume to gain a shared lower-level component.
 ## End Structure
 The content used as the resume asset can be found [here](https://raw.githubusercontent.com/Kevin-K/kevin-k.github.io/815ac2295cbba8325af1adb1568fefdf84194aaa/src/assets/resume.json).
 ```js
+import React from 'react';
 import resumeData from '../assets/resume.json';
 const Resume = props => (<div>
       <Heading {...resumeData.basics} />
