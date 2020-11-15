@@ -4,7 +4,8 @@ date: 2019-12-10T03:54:55.905Z
 title: Building a Resume with React
 description: My journey through component design iteration
 ---
-import { Heading } from "resume-react";
+import theme from '../../src/themes';
+const EXAMPLE_STYLE = {border: `5px solid ${theme.palette.primary.main}`, padding: '20px'};
 import old_resume_snippet from '../../src/assets/old_resume_snippet.jpg';
 import old_resume_snippet_monolithic from '../../src/assets/old_resume_snippet_monolithic.jpg';
 
@@ -17,9 +18,9 @@ a selected theme, you can quickly export a resume to PDF or HTML.
 
 I was in the process of building this website to host my resume and hobby 
 projects and decided to take my resume and recreated it in React. I'd like to say
-there was a flashy reason to do this. Pragmaticly, the resume has nothing to gain in performance
-or content editability (since its just updating a JSON file). Hobby projects are a great chance for
-developers to through pragmatism aside and try new things "just because". 
+there was a flashy reason to do this. Pragmatically, the resume has nothing to gain in performance
+or content editability (since it's just updating a JSON file). Hobby projects are a great chance for
+developers to throw needed buy-in aside and try new things "just because". 
 
 I've had a laundry list of things in the javascript ecosystem to revisit, two of which were:
  1. publishing NPM packages
@@ -53,7 +54,7 @@ from the top-down, so to begin I envisioned creating a monolithic resume compone
 
 ---
 
-### Iteration 1: 1 Component to Rule them all
+## Iteration 1: 1 Component to Rule them all
 
 <figure>
 <img src={old_resume_snippet_monolithic} style={{display: 'block', width: 400, margin: 'auto'}}/>
@@ -69,7 +70,7 @@ from the top-down, so to begin I envisioned creating a monolithic resume compone
 - High code complexity
 
 The pros here are file simplicity, I could copy the existing HTML into 1 react component and call it a day,
-should I need to revisit the resume in the future all I'll need to do is open my `resume.js`
+should I need to revisit the resume in the future all I'll need to do is open a **resume.js**
 file and modify my component.
 
 The number of properties applied onto the resume component will be high. That is
@@ -77,29 +78,31 @@ not of great concern to me, as I view this component as serving a single purpose
 
 ```jsx
 <Resume
-    name="Kevin Kelly"
-    title="Senior Software Engineer"
-    email="kevin@kevinjkelly.net"
-    phone="(555) 555-5555"
-    summary="Kevin is an experienced software engineer with  ..."
-    experience={[
-        {
-            company: "StealthPath, Inc",
-            title: "Senior Software Engineer",
-            startDate: "2017-07-01",
-            endDate: "present"
-            achievements: [
-                "Team lead and lead front-end developer for ...",
-                "Managed and mentored web development efforts ...",
-                //...
-            ]
+  name="John Smith"
+  title="Architect"
+  email="john.smith@example.com" 
+  phone="(555) 555-5555"
+  location={{city: "New York", region: "NY"}} 
+  phone="555-555-5555"
+  summary="Lorem ipsum dolor sit amet  ..."
+  experience={[
+    {
+      name: "Acme Inc",
+      position: "Lead Architect",
+      startDate: "2002-01-10",
+      endDate: "2008-08-01"
+      highlights: [
+        "Designed a 30 story house boat.", 
+        "Scuba instructor on company retreat.",
+        "Weaved many underwater baskets."
+      ]
 
-        }
-    ]}
-    volunteer={[/*...*/]}
-    education={[/*...*/]}
-    skills={[/*...*/]}
-    />
+    }
+  ]}
+  volunteer={[/*...*/]}
+  education={[/*...*/]}
+  skills={[/*...*/]}
+/>
 ```
 
 
@@ -108,7 +111,7 @@ are to either:
 
 1. Copy and paste the Resume component code. **Bad: duplicated logic**
 2. Add the modified layout to the Resume component and add a prop to select the
-modified layout. **Bad: breaks [single responsiblity principle](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)**
+modified layout. **Bad: breaks [single responsibility  principle](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)**
 
 It's not evident yet, but there's an abundance of functionality within this
 one component. Having a top-level component, Resume, sounds beneficial!
@@ -119,134 +122,469 @@ a component barrier. Wherever it is rendered, other components rendered shouldn'
 
 
 Rather than just pick apart what lives under the shell of Resume, I'll give my code the
-"test smell-test"
+"test smell-test".
 
 ---
 
-### Iteration 2: Now with Smell-O-Vision
+## Iteration 2: Now with Smell-O-Vision
 
 #### Test Smell-Test
-*How painful is testing this going to be?*
+*What could be tested?*
 
-Break down what you would test in your component. If this list is long, try and find some
+Break down what you could test in your component. This is awkward since code already exists, and tests
+do not for the react component in this instance. If this list is long, try and find some
 commonalities of your tests. This may shed some light on a reusable component to
 break out.
 
-1. Name is rendered.
-2. Title is rendered.
-3. Address is rendered.
-4. Email is rendered.
-5. Phone number is rendered.
-6. "SUMMARY" category title is rendered.
-6. Summary content is rendered.
-7. "EXPERIENCE" category title is rendered.
-8. Each job: company is rendered.
-9. Each job: title is rendered.
-10. Each job: timeframe is rendered.
-11. Each job: each achievement is rendered.
-12. "VOLUNTEER" category title is rendered.
-13. Each volunteer: company is rendered.
-14. Each volunteer: title is rendered.
-15. Each volunteer: timeframe is rendered.
-16. Each volunteer: each achievement is rendered.
-17. "EDUCATION" category title is rendered.
-18. Each education: school is rendered.
-19. Each education: degree is rendered.
-20. Each education: timeframe is rendered.
-21. Each education: GPA is rendered.
-22. "SKILLS" category title is rendered.
-23. Each skill: skill group is rendered.
-24. Each skill group: individual skills are rendered.
+1. Name is shown.
+2. Title is shown.
+3. Address is shown.
+4. Email is shown.
+5. Phone number is shown.
+6. "SUMMARY" category title is shown.
+6. Summary content is shown.
+7. "EXPERIENCE" category title is shown.
+8. Each job: company is shown.
+9. Each job: title is shown.
+10. Each job: timeframe is shown.
+11. Each job: each achievement is shown.
+12. "VOLUNTEER" category title is shown.
+13. Each volunteer: company is shown.
+14. Each volunteer: title is shown.
+15. Each volunteer: timeframe is shown.
+16. Each volunteer: each achievement is shown.
+17. "EDUCATION" category title is shown.
+18. Each education: school is shown.
+19. Each education: degree is shown.
+20. Each education: timeframe is shown.
+21. Each education: GPA is shown.
+22. "SKILLS" category title is shown.
+23. Each skill: skill group is shown.
+24. Each skill group: individual skills are shown.
 
 Reading through my test cases, I see a pattern arise between each section
 of the resume below the header:
 
-1. A category title is rendered.
-2. Some content is rendered.
+1. A category title is shown.
+2. Some content is shown.
 
 I could potentially break my Resume component down to use a Content component.
 This would reduce the duplication of logic within my Resume that would be applied to 
 each content section.
 
-/// put mockup here for with content component.
+---
 
+### Content Component
+import {Content} from 'resume-react';
+
+<div style={EXAMPLE_STYLE}>
+  <Content title="EXPERIENCE">
+    <div>
+      <span>Section details go here, including things like:</span>
+      <ul>
+        <li> organization info </li>
+        <li> timeframe </li>
+        <li> list of details </li>
+      </ul>
+    </div>
+  </Content>
+</div>
+
+```jsx
+<Content title="EXPERIENCE">
+  <div>
+    <span>Section details go here, including things like:</span>
+    <ul>
+      <li> organization info </li>
+      <li> timeframe </li>
+      <li> list of details </li>
+    </ul>
+  </div>
+</Content>
+```
 
 #### Content commonalities
-I could go further to say within the content there are additional coorelations,
-like how the "EXPERIENCE" section and "VOLUNTEER" section have matching
+I could go further to say within the content there are additional correlations,
+like how the (work) "EXPERIENCE" section and "VOLUNTEER" section have matching
 test criterias and the style of each content section is identical.
 
 Looks like I can use a single component to handle both sections. Out of fear
 of pre-mature optimization, I'm going to create a component for each 
-content section, but let the "VOLUNTEER" section compoent call the "WORK" 
-section component.
+content section, but let the "VOLUNTEER" section component call the "EXPERIENCE" 
+section component. For generic purposes, I'll call that component **Work**.
 
-/// put mockup here with work and volunteer components
+---
+
+## Work Component
+import {Work} from 'resume-react';
+
+<div style={EXAMPLE_STYLE}>
+  <Work 
+    name="Acme Inc" 
+    position="Lead Architect" 
+    startDate="2002-01-10" 
+    endDate="2008-08-01" 
+    url="https://example.com"
+    highlights={["Designed a 30 story house boat.", "Scuba instructor on company retreat.", "Weaved many underwater baskets."]}
+  />
+</div>
+
+```jsx
+<Work 
+  name="Acme Inc" 
+  position="Lead Architect" 
+  startDate="2002-01-10" 
+  endDate="2008-08-01" 
+  url="https://example.com"
+  highlights={["Designed a 30 story house boat.", "Scuba instructor on company retreat.", "Weaved many underwater baskets."]}
+/>
+```
 
 The "EDUCATION" section seems to closely match "EXPERIENCE" as well.
 I see that my resume's education section includes a school, thats like a 
 company (in data labeling form, I'm not knocking our education system), but
-the GPA render doesn't coorelate to the achievement render.
+the GPA render doesn't correlate to the achievement render.
 The "EXPERIENCE" achievements are a list for each job, but I have only
 one GPA for each "EDUCATION" degree. Slightly lost? Me too. This looks
-like **pre-mature optimizaiton**. When I hit a point where
-a extraction isn't crystal clear I back off. It looks like "EDUCATION"
+like **premature optimization**. When I hit a point where
+an extraction isn't crystal-clear I back off. It looks like "EDUCATION"
 and "SKILLS" for now will be their own components.
 
+---
+
+## Education Component
+import {Education} from 'resume-react';
+
+<div style={EXAMPLE_STYLE}>
+  <Education 
+    institution="State Tech" 
+    studyType="Bachelor of Science" 
+    area="Underwater Basket Weaving"
+    startDate="1990-09-10" 
+    endDate="1996-05-01" 
+    gpa= "3.4"
+  />
+</div>
+
+```jsx
+<Education 
+  institution="State Tech" 
+  studyType="Bachelor of Science" 
+  area="Underwater Basket Weaving"
+  startDate="1990-09-10" 
+  endDate="1996-05-01" 
+  gpa= "3.4"
+/>
+```
+
+---
+
+## Skills Component
+import {Skills} from 'resume-react';
+
+<div style={EXAMPLE_STYLE}>
+  <Skills 
+    name="Weaving" 
+    level="Master"
+    keywords={["Straw","Yarn","Paper","The fabric of time and space"]}
+  />
+</div>
+
+```jsx
+<Skills 
+  name="Weaving" 
+  level="Master"
+  keywords={["Straw","Yarn","Paper","The fabric of time and space"]}
+/>
+```
+
+---
+
+## Current State
+
 Rome wasn't built in a day, and the cleanest code wasn't built in one
-Iteration. Extracting code often poses new challenges, so I 
+teration. Extracting code often poses new challenges, so I 
 err on the side of caution. Extract too much? You're now dealing
 with component hell. Extract too little? You're not getting
 "clean cuts" of your components for reusability.
 
+At this point I'm happy with the reduction in code duplication, by
+structuring each section of my resume into **Content** blocks containing 
+**Work**, **Volunteer**, **Education**, and **Skill** components. 
+
+<div style={EXAMPLE_STYLE}>
+  <Content title="EXPERIENCE">
+    <Work 
+      name="Acme Inc" 
+      position="Lead Architect" 
+      startDate="2002-01-10" 
+      endDate="2008-08-01" 
+      url="https://example.com"
+      highlights={["Designed a 30 story house boat.", "Scuba instructor on company retreat.", "Weaved many underwater baskets."]}
+    />
+    <Work 
+      name="Example LLC" 
+      position="Architect" 
+      startDate="2008-07-01" 
+      endDate="2000-01-01" 
+      url="https://example.com"
+      highlights={["Made examples", "Generated stock footage", "Lorel ipsum"]}
+    />
+  </Content>
+  <Content title="EDUCATION">
+    <Education 
+      institution="State Tech" 
+      studyType="Bachelor of Science" 
+      area="Underwater Basket Weaving"
+      startDate="1990-09-10" 
+      endDate="1996-05-01" 
+      gpa= "3.4"
+    />
+  </Content>
+  <Content title="SKILLS">
+    <Skills 
+      name="Weaving" 
+      level="Master"
+      keywords={["Straw","Yarn","Paper","The fabric of time and space"]}
+    />
+    <Skills 
+      name="Design" 
+      level="Intermediate"
+      keywords={["CSS","Figma"]}
+    />
+  </Content>
+</div>
+
+```jsx
+<Content title="EXPERIENCE">
+  <Work 
+    name="Acme Inc" 
+    position="Lead Architect" 
+    startDate="2002-01-10" 
+    endDate="2008-08-01" 
+    url="https://example.com"
+    highlights={["Designed a 30 story house boat.", "Scuba instructor on company retreat.", "Weaved many underwater baskets."]}
+  />
+  <Work 
+    name="Example LLC" 
+    position="Architect" 
+    startDate="2008-07-01" 
+    endDate="2000-01-01" 
+    url="https://example.com"
+    highlights={["Made examples", "Generated stock footage", "Lorem ipsum"]}
+  />
+</Content>
+<Content title="EDUCATION">
+  <Education 
+    institution="State Tech" 
+    studyType="Bachelor of Science" 
+    area="Underwater Basket Weaving"
+    startDate="1990-09-10" 
+    endDate="1996-05-01" 
+    gpa="3.4"
+  />
+</Content>
+<Content title="SKILLS">
+  <Skills 
+    name="Weaving" 
+    level="Master"
+    keywords={["Straw","Yarn","Paper","The fabric of time and space"]}
+  />
+  <Skills 
+    name="Design" 
+    level="Intermediate"
+    keywords={["CSS","Figma"]}
+  />
+</Content>
+```
+
+What remains? My resume contains a chunk of unique logic that pertains to showing my name,
+title, contact details, that may be worth componentizing. The summary is just a text blurb, so
+it can use a **Content** block, no need for extra components.
+
 ---
 
-### Iteration 3: Sweeping under the Rug
+## Heading Component
 
-At this point I'm happy with the reduction in code duplication, by
-structuring each section of my resume into `Content` blocks containing 
-`Work`, `Volunteer`, `Education`, and `Skill` components, my resume
-only contains a chunk of unique logic that pertains to showing my name,
-title, contact details. The summary is just a text blurb, so
-it can be a child of a `Content` block, no need for extra components.
-
-Moving the heading logic into its own component isn't saving any lines
-of code. If anything its adding more files to the project to manage.
+Moving the heading logic into its own component, **Heading**, isn't saving any lines
+of code. If anything it's adding more files to the project to manage. 
 For future reusability sake I want to make the heading its own component,
 I may place it elsewhere on my projects as my signature, and it would be
 silly to import from my resume to gain a shared lower-level component.
 
+import { Heading } from "resume-react";
 
+<div style={EXAMPLE_STYLE}>
+  <Heading 
+    name="John Smith" 
+    title="Architect" 
+    email="john.smith@example.com" 
+    location={{city: "New York", region: "NY"}} 
+    phone="555-555-5555"
+  />
+</div>
+
+```jsx
+<Heading 
+  name="John Smith" 
+  title="Architect" 
+  email="john.smith@example.com" 
+  location={{city: "New York", region: "NY"}} 
+  phone="555-555-5555"
+/>  
+```
+
+---
 
 ## End Structure
-The content used as the resume asset can be found [here](https://raw.githubusercontent.com/Kevin-K/kevin-k.github.io/815ac2295cbba8325af1adb1568fefdf84194aaa/src/assets/resume.json).
+
+At this point, the building blocks exist to make a resume. The **resume-react** component library stays 
+fairly unopinionated on styling. I opted for that approach to make adoption easier for users.
+
+<div style={EXAMPLE_STYLE}>
+  <Heading 
+    name="John Smith" 
+    title="Architect" 
+    email="john.smith@example.com" 
+    location={{city: "New York", region: "NY"}} 
+    phone="555-555-5555"
+  />
+  <Content title="SUMMARY">
+    <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </span>
+  </Content>
+  <Content title="EXPERIENCE">
+    <Work 
+      name="Acme Inc" 
+      position="Lead Architect" 
+      startDate="2002-01-10" 
+      endDate="2008-08-01" 
+      url="https://example.com"
+      highlights={["Designed a 30 story house boat.", "Scuba instructor on company retreat.", "Weaved many underwater baskets."]}
+    />
+    <Work 
+      name="Example LLC" 
+      position="Architect" 
+      startDate="2008-07-01" 
+      endDate="2000-01-01" 
+      url="https://example.com"
+      highlights={["Made examples", "Generated stock footage", "Lorem ipsum"]}
+    />
+  </Content>
+  <Content title="EDUCATION">
+      <Education 
+      institution="State Tech" 
+      studyType="Bachelor of Science" 
+      area="Underwater Basket Weaving"
+      startDate="1990-09-10" 
+      endDate="1996-05-01" 
+      gpa= "3.4"
+    />
+  </Content>
+  <Content title="SKILLS">
+    <Skills 
+      name="Weaving" 
+      level="Master"
+      keywords={["Straw","Yarn","Paper","The fabric of time and space"]}
+    />
+    <Skills 
+      name="Design" 
+      level="Intermediate"
+      keywords={["CSS","Figma"]}
+    />
+  </Content>
+</div>
+
 ```js
-import React from 'react';
-import resumeData from '../assets/resume.json';
-const Resume = props => (<div>
-      <Heading {...resumeData.basics} />
-      <Content title="SUMMARY">
-        <span> {resumeData.basics.summary}</span>
-      </Content>
-      <Content title="EXPERIENCE">
-        {resumeData.work.map(entry => (
-          <Work {...entry} key={`${entry.name}-${entry.startDate}`} />
-        ))}
-      </Content>
-      <Content title="VOLUNTEER">
-        {resumeData.volunteer.map(entry => (
-          <Volunteer {...entry} key={`${entry.name}-${entry.startDate}`} />
-        ))}
-      </Content>
-      <Content title="EDUCATION">
-        {resumeData.education.map(entry => (
-          <Education {...entry} key={`${entry.name}-${entry.startDate}`} />
-        ))}
-      </Content>
-      <Content title="SKILLS">
-        {resumeData.skills.map(entry => (
-          <Skill {...entry} key={`${entry.name}-${entry.level}`} />
-        ))}
-      </Content>
-    </div>);
+<Heading 
+    name="John Smith" 
+    title="Architect" 
+    email="john.smith@example.com" 
+    location={{city: "New York", region: "NY"}} 
+    phone="555-555-5555"
+  />
+<Content title="SUMMARY">
+  <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </span>
+</Content>
+<Content title="EXPERIENCE">
+  <Work 
+    name="Acme Inc" 
+    position="Lead Architect" 
+    startDate="2002-01-10" 
+    endDate="2008-08-01" 
+    url="https://example.com"
+    highlights={["Designed a 30 story house boat.", "Scuba instructor on company retreat.", "Weaved many underwater baskets."]}
+  />
+  <Work 
+    name="Example LLC" 
+    position="Architect" 
+    startDate="2008-07-01" 
+    endDate="2000-01-01" 
+    url="https://example.com"
+    highlights={["Made examples", "Generated stock footage", "Lorem ipsum"]}
+  />
+</Content>
+<Content title="EDUCATION">
+  <Education 
+    institution="State Tech" 
+    studyType="Bachelor of Science" 
+    area="Underwater Basket Weaving"
+    startDate="1990-09-10" 
+    endDate="1996-05-01" 
+    gpa= "3.4"
+  />
+</Content>
+<Content title="SKILLS">
+  <Skills 
+    name="Weaving" 
+    level="Master"
+    keywords={["Straw","Yarn","Paper","The fabric of time and space"]}
+  />
+  <Skills 
+    name="Design" 
+    level="Intermediate"
+    keywords={["CSS","Figma"]}
+  />
+</Content>
+```
+
+---
+
+## Closing Thoughts
+
+Without diving into the [component definitions](https://github.com/Kevin-K/resume-react),
+the componentry has been established to adhere to the JSONSchema. the **Heading**, **Work**, **Volunteer**, 
+**Education**, and **Skills** accept properties matching the schema structure. For example, this snippet
+shows how I put the components to use on my [resume](/resume):
+
+```jsx
+import resumeData from './sampleResume.json';
+
+//...
+
+<Heading {...resumeData.basics} />
+<Content title="SUMMARY">
+  <span> {resumeData.basics.summary}</span>
+</Content>
+<Content title="EXPERIENCE">
+  {resumeData.work.map(entry => (
+    <Work {...entry} key={`${entry.name}-${entry.startDate}`} />
+  ))}
+</Content>
+<Content title="VOLUNTEER">
+  {resumeData.volunteer.map(entry => (
+    <Volunteer {...entry} key={`${entry.name}-${entry.startDate}`} />
+  ))}
+</Content>
+<Content title="EDUCATION">
+  {resumeData.education.map(entry => (
+    <Education {...entry} key={`${entry.name}-${entry.startDate}`} />
+  ))}
+</Content>
+<Content title="SKILLS">
+  {resumeData.skills.map(entry => (
+    <Skills {...entry} key={`${entry.name}-${entry.level}`} />
+  ))}
+</Content>
+
+//...
 ```
