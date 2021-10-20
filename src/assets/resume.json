@@ -30,7 +30,7 @@
         "Manage a remote-oriented team of fullstack engineers focused publishing and monetizing podcasts globally.",
         "Provide system design, planning, and coordination for key cross-organization initiatives.",
         "Migrated providers for database responsible for nearly a billion monthly podcast listens with zero downtime.",
-        "Implemented CI/CD pipeline to replicate an existing platform as a service deployment strategy into a Kubernetes based strategy.",
+        "Implemented CI/CD pipeline to replicate an existing Platform as a Service deployment strategy into a Kubernetes based strategy.",
         "Active technical contributor in Ruby on Rails, React, and Kubernetes."
       ]
     },
@@ -137,6 +137,7 @@
         "Terraform",
         "Google Cloud Platform",
         "Amazon Web Services",
+        "Heroku",
         "CircleCI",
         "Jenkins"
       ]
