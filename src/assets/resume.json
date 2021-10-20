@@ -1,12 +1,12 @@
 {
   "basics": {
     "name": "Kevin Kelly",
-    "title": "Senior Software Engineer",
+    "title": "Engineering Manager",
     "picture": "",
     "email": "kevin@kevinjkelly.net",
     "phone": "",
     "website": "kevinjkelly.net",
-    "summary": "Kevin is an experienced software engineer with a specialization in web applications. He excels at developing solutions in new fields, and is a strong leader and mentor for software development.",
+    "summary": "Kevin is an experienced software engineer currently solving problems in podcast distribution and monetization. He is focused on growth, both of the individual and the business.",
     "location": {
       "address": "",
       "postalCode": "",
@@ -23,9 +23,22 @@
   },
   "work": [
     {
+      "name": "Spotify",
+      "position": "Engineering Manager",
+      "startDate": "2020-12-01",
+      "highlights": [
+        "Manage a remote-oriented team of fullstack engineers focused publishing and monetizing podcasts globally.",
+        "Provide system design, planning, and coordination for key cross-organization initiatives.",
+        "Migrated providers for database responsible for nearly a billion monthly podcast listens with zero downtime.",
+        "Implemented CI/CD pipeline to replicate an existing platform as a service deployment strategy into a Kubernetes based strategy.",
+        "Active technical contributor in Ruby on Rails, React, and Kubernetes."
+      ]
+    },
+    {
       "name": "Megaphone",
       "position": "Lead Engineer",
       "startDate": "2019-08-01",
+      "endDate": "2020-12-01",
       "highlights": [
         "Lead developer for a customer facing content management system built with ReactJS, Ruby on Rails, and PostgreSQL.",
         "Continuous interfacing with product management, customer experience, and user experience regarding development efforts.",
@@ -39,9 +52,8 @@
       "endDate": "2019-08-01",
       "highlights": [
         "Team lead and lead front-end developer for a cyber-security provisioning application built with ReactJS, GraphQL, NodeJS, and PostgreSQL.",
-        "Managed and mentored web application development efforts for a team of 5 application developers.",
-        "Designed and built OSI Layer 2/3/4 filtration functionality in C/C++ to provide network security in both operating system kernel and user space.",
-        "Performed requirement derivation, design documentation, and task allotment for various efforts."
+        "Supervised and mentored web application development efforts for a team of 5 application developers.",
+        "Designed and built OSI Layer 2/3/4 filtration functionality in C/C++ to provide network security in both operating system kernel and user space."
       ]
     },
     {
@@ -51,8 +63,7 @@
       "endDate": "2017-07-01",
       "highlights": [
         "Lead web developer for a signal processing effort. Developed and maintained the real-time web application for process configuration and analytics.",
-        "Lead developer of Ozone IWC, providing web application communication without server middleware.",
-        "Mentored JavaScript efforts including real-time data streaming and data visualization."
+        "Lead developer of Ozone IWC, providing web application communication without server middleware."
       ]
     },
     {
@@ -63,15 +74,6 @@
       "highlights": [
         "Developed a networked android application for data logging and debugging interfaced devices.",
         "Developed commercial android applications for various device sizes in an agile-based effort."
-      ]
-    },
-    {
-      "name": "Virginia Tech, AUVT",
-      "position": "Computer Vision Engineer",
-      "startDate": "2012-08-01",
-      "endDate": "2013-05-01",
-      "highlights": [
-        "Developed visual detection algorithms with OpenCV to aid an autonomous submarine in navigation."
       ]
     }
   ],
@@ -110,15 +112,6 @@
         "Angular"
       ]
     },
-    { 
-      "name": "Databases",
-      "level": "",
-      "keywords": [
-        "PostgreSQL",
-        "Druid",
-        "MongoDB"
-      ]
-    },
     {
       "name": "Software Languages",
       "level": "",
@@ -130,31 +123,22 @@
         "Python",
         "Java",
         "C/C++",
-        "Verilog",
-        "VHDL"
+        "PostgreSQL",
+        "Druid",
+        "MongoDB"
       ]
     },
     {
-      "name": "Test & Integration",
-      "level": "",
-      "keywords": [
-        "CircleCI",
-        "Jenkins",
-        "Jest",
-        "React Testing Library",
-        "Enzyme",
-        "Rspec",
-        "Capybara",
-        "Googletest"
-      ]
-    },
-    {
-      "name": "Deployment",
+      "name": "Integration & Deployment",
       "level": "",
       "keywords": [
         "Docker",
+        "Kubernetes",
+        "Terraform",
         "Google Cloud Platform",
-        "Amazon Web Services"
+        "Amazon Web Services",
+        "CircleCI",
+        "Jenkins"
       ]
     },
     {
